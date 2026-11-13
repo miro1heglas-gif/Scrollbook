@@ -63,6 +63,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <header><h1>Scrollbook</h1><span class="count" id="count"></span></header>
   <ul id="songs"></ul>
 </div>
+<input id="kbin" readonly inputmode="none" autocomplete="off" autocapitalize="off" aria-hidden="true" tabindex="-1" style="position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;border:0;padding:0;pointer-events:none">
 <div id="reader" hidden>
   <div id="bar">
     <button id="back" aria-label="Späť na zoznam">‹ Zoznam</button>
@@ -75,6 +76,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="grp"><span class="lab">Rýchlosť</span><button id="slow" aria-label="Pomalšie">−</button><span class="val" id="spd"></span><button id="fast" aria-label="Rýchlejšie">+</button></div>
     <div class="grp"><span class="lab">Písmo</span><button id="fs-" aria-label="Menšie písmo">A−</button><button id="fs+" aria-label="Väčšie písmo">A+</button></div>
     <button class="tgl" id="chords" aria-pressed="true">Akordy</button>
+    <button id="ped" aria-label="Pripraviť pedál">Pedál ⟳</button>
     <span class="lab" id="kb">Kláves: –</span>
     <button id="skip" aria-label="10 riadkov nižšie">10 ↓</button>
     <button id="top" aria-label="Na začiatok">⤒</button>
@@ -95,7 +97,7 @@ $('songs').innerHTML=SONGS.map((s,i)=>`<li><button data-i="${i}"><span class="n"
 $('songs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)open(+b.dataset.i)});
 
 function open(i){
-  cur=i;const s=SONGS[i];st.speed=s.speed||30;
+  cur=i;const s=SONGS[i];st.speed=s.speed||30;setTimeout(()=>initPedal(false),0);
   $('ttl').innerHTML=esc(s.title)+'<small>'+esc(s.artist)+'</small>';
   $('text').innerHTML=s.lines.map(l=>'<div class="ln">'+(l=>{
     if(!l.c&&!l.s.length)return '<div class="row ly">&nbsp;</div>';
@@ -168,29 +170,47 @@ function skip(n){
 // Bluetooth pedal (M-Vave Cube Turner) types keys.
 // Left pedal (Left/Up/PageUp) = start/pause. Right pedal (Right/Down/PageDown/Space/Enter): tap = 10 lines down, hold = 10 lines up.
 const LEFT=['ArrowLeft','ArrowUp','PageUp'],RIGHT=['ArrowRight','ArrowDown','PageDown',' ','Enter'];
-let rightHeld=false,holdFired=false,holdTimer=0;
-document.addEventListener('keydown',e=>{
+let rightHeld=false,holdFired=false,holdTimer=0,lastKey=0;
+function releaseRight(){clearTimeout(holdTimer);rightHeld=false;holdFired=false}
+function onKey(e){
+  lastKey=Date.now();
   if(!$('reader').hidden)$('kb').textContent='Kláves: '+(e.key===' '?'medzera':e.key);
   if($('reader').hidden)return;
   if(LEFT.includes(e.key)){e.preventDefault();if(!e.repeat)toggle()}
   else if(RIGHT.includes(e.key)){
     e.preventDefault();
-    if(rightHeld)return;
+    if(e.repeat)return;
+    // ak sa predošlé uvoľnenie stratilo (výpadok spojenia), začni nový stisk
+    if(rightHeld)releaseRight();
     rightHeld=true;holdFired=false;
-    holdTimer=setTimeout(()=>{holdFired=true;skip(-10)},600);
+    holdTimer=setTimeout(()=>{holdFired=true;skip(-10);setTimeout(releaseRight,1500)},600);
   }
   else if(e.key==='+'){st.speed=Math.min(200,st.speed+5);apply();save()}
   else if(e.key==='-'){st.speed=Math.max(5,st.speed-5);apply();save()}
-});
-document.addEventListener('keyup',e=>{
+}
+function onKeyUp(e){
   if(RIGHT.includes(e.key)&&rightHeld){
     clearTimeout(holdTimer);
     if(!holdFired&&!$('reader').hidden)skip(10);
     rightHeld=false;
   }
-});
+}
+window.addEventListener('keydown',onKey,true);
+window.addEventListener('keyup',onKeyUp,true);
+// Inicializácia pedála: skrytý vstup drží fokus, aby iPad posielal klávesy z pedála do stránky
+const kbin=$('kbin');
+function initPedal(msg){
+  try{kbin.focus({preventScroll:true})}catch(_){}
+  releaseRight();
+  if(msg&&!$('reader').hidden)$('kb').textContent='Pedál pripravený – stlač ho';
+}
+document.addEventListener('pointerdown',()=>initPedal(false),true);
+kbin.addEventListener('blur',()=>setTimeout(()=>{if(!document.hidden)initPedal(false)},250));
+window.addEventListener('focus',()=>initPedal(false));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)initPedal(false)});
+$('ped').addEventListener('click',()=>initPedal(true));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
-apply();
+apply();initPedal(false);
 </script>
 
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
