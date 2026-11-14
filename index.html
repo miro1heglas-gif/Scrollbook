@@ -98,7 +98,7 @@ try{Object.assign(st,JSON.parse(localStorage.getItem('scrollbook')||'{}'))}catch
 const save=()=>{try{localStorage.setItem('scrollbook',JSON.stringify(st))}catch(e){}};
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 
-$('count').textContent=SONGS.length+' piesní';
+$('count').textContent=SONGS.length+' piesní · v12';
 $('songs').innerHTML=SONGS.map((s,i)=>`<li><button data-i="${i}"><span class="n">${i+1}</span><span><span class="t">${esc(s.title)}</span><span class="a">${esc(s.artist)}</span></span></button></li>`).join('');
 $('songs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)open(+b.dataset.i)});
 
