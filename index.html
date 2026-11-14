@@ -3,19 +3,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Scrollbook">
+<meta name="apple-mobile-web-app-title" content="Pantheon Rokoko">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0e0f12">
-<title>Scrollbook</title>
+<title>Pantheon Rokoko</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
 body{margin:0;font:14px system-ui,-apple-system,sans-serif}
 img{max-width:100%}[hidden]{display:none!important}
 </style></head><body>
 <script>document.documentElement.setAttribute("data-theme","dark")</script>
-<title>Scrollbook</title>
+<title>Pantheon Rokoko</title>
 <style>
 /* Layout: song list screen and a full-height reader with a fixed control bar; stage look, dark first */
 :root{--bg:#0e0f12;--panel:#17181d;--line:#2a2c34;--fg:#f2efe8;--dim:#8d909b;--accent:#ffb43a;--note:#ff5c5c;--hl:#4dff6e;--sky:#74c7ff;--on-accent:#1a1204;
@@ -27,10 +27,15 @@ html{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow:hidden}
 #list,#reader{height:100%;display:flex;flex-direction:column;min-height:0}
 header{padding-block:18px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-h1{font-size:1.5rem;margin:0;font-weight:600;text-wrap:balance}
+h1{font-size:1.5rem;margin:0;font-weight:600;text-wrap:balance;display:flex;align-items:center;gap:10px}
+.logo{width:40px;height:40px;flex:none}
 .count{color:var(--dim);font-size:.9rem}
 #songs{list-style:none;margin:0;padding:0 0 24px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px}
 #songs button{width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:14px 16px;font:inherit;display:flex;gap:14px;align-items:center;cursor:pointer;min-height:56px}
+#list{position:relative}
+#list::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3CradialGradient id=%22g%22 cx=%2250%25%22 cy=%2242%25%22 r=%2265%25%22%3E%3Cstop offset=%220%22 stop-color=%22%232a1d0c%22/%3E%3Cstop offset=%221%22 stop-color=%22%230e0f12%22/%3E%3C/radialGradient%3E%3ClinearGradient id=%22au%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffd27a%22/%3E%3Cstop offset=%221%22 stop-color=%22%23e8921a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg transform=%22translate%280,16%29%22%3E%3C%21-- rokokov%C3%A9 zvitky --%3E%3Cg fill=%22none%22 stroke=%22%23ffb43a%22 stroke-width=%229%22 stroke-linecap=%22round%22%3E%3Cpath d=%22M88 214C34 214 26 292 70 312C102 326 124 296 104 280C92 270 78 280 86 292%22/%3E%3Cpath d=%22M424 214C478 214 486 292 442 312C410 326 388 296 408 280C420 270 434 280 426 292%22/%3E%3C/g%3E%3C%21-- Pante%C3%B3n: %C5%A1t%C3%ADt --%3E%3Cpolygon points=%22256,70 424,196 88,196%22 fill=%22none%22 stroke=%22url%28%23au%29%22 stroke-width=%2212%22 stroke-linejoin=%22round%22/%3E%3Cpolygon points=%22256,106 372,190 140,190%22 fill=%22none%22 stroke=%22%23ffb43a%22 stroke-width=%224%22 stroke-linejoin=%22round%22 opacity=%22.55%22/%3E%3Crect x=%2280%22 y=%22204%22 width=%22352%22 height=%2224%22 rx=%223%22 fill=%22url%28%23au%29%22/%3E%3C%21-- st%C4%BApy --%3E%3Cg fill=%22url%28%23au%29%22%3E%3Crect x=%22104%22 y=%22238%22 width=%2230%22 height=%22128%22/%3E%3Crect x=%22178%22 y=%22238%22 width=%2230%22 height=%22128%22/%3E%3Crect x=%22304%22 y=%22238%22 width=%2230%22 height=%22128%22/%3E%3Crect x=%22378%22 y=%22238%22 width=%2230%22 height=%22128%22/%3E%3Crect x=%2296%22 y=%22232%22 width=%2246%22 height=%2210%22 rx=%222%22/%3E%3Crect x=%22170%22 y=%22232%22 width=%2246%22 height=%2210%22 rx=%222%22/%3E%3Crect x=%22296%22 y=%22232%22 width=%2246%22 height=%2210%22 rx=%222%22/%3E%3Crect x=%22370%22 y=%22232%22 width=%2246%22 height=%2210%22 rx=%222%22/%3E%3Crect x=%2296%22 y=%22362%22 width=%2246%22 height=%2212%22 rx=%222%22/%3E%3Crect x=%22170%22 y=%22362%22 width=%2246%22 height=%2212%22 rx=%222%22/%3E%3Crect x=%22296%22 y=%22362%22 width=%2246%22 height=%2212%22 rx=%222%22/%3E%3Crect x=%22370%22 y=%22362%22 width=%2246%22 height=%2212%22 rx=%222%22/%3E%3Crect x=%2276%22 y=%22378%22 width=%22360%22 height=%2214%22 rx=%223%22/%3E%3Crect x=%2260%22 y=%22396%22 width=%22392%22 height=%2214%22 rx=%223%22/%3E%3C/g%3E%3C%21-- rockov%C3%BD blesk --%3E%3Cpolygon points=%22286,128 192,278 250,278 224,388 330,236 270,236%22 fill=%22%23ff5c5c%22 stroke=%22%230e0f12%22 stroke-width=%2210%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E") center 52%/min(86vmin,620px) no-repeat;opacity:.24;pointer-events:none;z-index:0}
+#list>*{position:relative;z-index:1}
+#songs button{background:rgba(23,24,29,.78);background:color-mix(in srgb,var(--panel) 78%,transparent);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
 #songs .n{font-family:var(--mono);color:var(--accent);min-width:2ch;text-align:right}
 #songs .t{font-weight:600;display:block}
 #songs .a{color:var(--dim);font-size:.9rem}
@@ -60,7 +65,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 
 <div id="list">
-  <header><h1>Scrollbook</h1><span class="count" id="count"></span></header>
+  <header><h1><svg class="logo" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><radialGradient id="g2" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#2a1d0c"/><stop offset="1" stop-color="#0e0f12"/></radialGradient><linearGradient id="au2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#e8921a"/></linearGradient></defs><g transform="translate(0,16)"><!-- rokokové zvitky --><g fill="none" stroke="#ffb43a" stroke-width="9" stroke-linecap="round"><path d="M88 214C34 214 26 292 70 312C102 326 124 296 104 280C92 270 78 280 86 292"/><path d="M424 214C478 214 486 292 442 312C410 326 388 296 408 280C420 270 434 280 426 292"/></g><!-- Panteón: štít --><polygon points="256,70 424,196 88,196" fill="none" stroke="url(#au2)" stroke-width="12" stroke-linejoin="round"/><polygon points="256,106 372,190 140,190" fill="none" stroke="#ffb43a" stroke-width="4" stroke-linejoin="round" opacity=".55"/><rect x="80" y="204" width="352" height="24" rx="3" fill="url(#au2)"/><!-- stĺpy --><g fill="url(#au2)"><rect x="104" y="238" width="30" height="128"/><rect x="178" y="238" width="30" height="128"/><rect x="304" y="238" width="30" height="128"/><rect x="378" y="238" width="30" height="128"/><rect x="96" y="232" width="46" height="10" rx="2"/><rect x="170" y="232" width="46" height="10" rx="2"/><rect x="296" y="232" width="46" height="10" rx="2"/><rect x="370" y="232" width="46" height="10" rx="2"/><rect x="96" y="362" width="46" height="12" rx="2"/><rect x="170" y="362" width="46" height="12" rx="2"/><rect x="296" y="362" width="46" height="12" rx="2"/><rect x="370" y="362" width="46" height="12" rx="2"/><rect x="76" y="378" width="360" height="14" rx="3"/><rect x="60" y="396" width="392" height="14" rx="3"/></g><!-- rockový blesk --><polygon points="286,128 192,278 250,278 224,388 330,236 270,236" fill="#ff5c5c" stroke="#0e0f12" stroke-width="10" stroke-linejoin="round"/></g></svg><span>Pantheon Rokoko</span></h1><span class="count" id="count"></span></header>
   <ul id="songs"></ul>
 </div>
 <input id="kbin" readonly inputmode="none" autocomplete="off" autocapitalize="off" aria-hidden="true" tabindex="-1" style="position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;border:0;padding:0;pointer-events:none">

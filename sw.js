@@ -1,4 +1,4 @@
-const CACHE = "scrollbook-v5";
+const CACHE = "pantheon-v7";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {
