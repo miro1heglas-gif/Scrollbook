@@ -79,7 +79,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #pdfv.fitw .pg{padding:3px 0}
 #pdfv canvas{display:block;background:#fff}
 #pmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;color:var(--dim);padding:24px;font-size:1.15rem;pointer-events:none}
-#toast{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);background:rgba(0,0,0,.88);color:#fff;border:2px solid var(--accent);border-radius:16px;padding:18px 34px;font:700 1.9rem var(--sans);z-index:50;pointer-events:none;text-align:center;white-space:nowrap}
+#toast{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);background:rgba(0,0,0,.88);color:#fff;border:2px solid var(--accent);border-radius:16px;padding:18px 34px;font:700 1.9rem var(--sans);z-index:50;pointer-events:none;text-align:center;white-space:pre-line;line-height:1.35}
 </style>
 
 <div id="list">
@@ -123,7 +123,7 @@ const save=()=>{try{localStorage.setItem('scrollbook',JSON.stringify(st))}catch(
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 const readerOpen=()=>!$('reader').hidden;
 
-$('count').textContent=SONGS.length+' piesní · v14';
+$('count').textContent=SONGS.length+' piesní · v15';
 $('songs').innerHTML=SONGS.map((s,i)=>`<li><button data-i="${i}"><span class="n">${i+1}</span><span class="tx"><span class="t">${esc(s.title)}</span><span class="a">${esc(s.artist)}</span></span>${s.tag?`<span class="tag">${esc(s.tag)}</span>`:''}</button></li>`).join('');
 $('songs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)open(+b.dataset.i)});
 
@@ -233,11 +233,13 @@ function showMode(frac){
   if(pdf){stop();keepAwake(true);openPdf(frac)}
   else{PV.tok++;PV.gen++;keepAwake(false);requestAnimationFrame(()=>setTextFrac(frac))}
 }
-function setMode(m,frac){
+function setMode(m,frac,byPedal){
   if(m!=='pdf')m='text';
   if(st.mode===m)return;
   st.mode=m;save();apply();
-  if(readerOpen()){showMode(frac);toast(m==='pdf'?'PDF – listovanie':'Text – rolovanie')}
+  const msg=(m==='pdf'?'PDF – listovanie':'Text – rolovanie')+(byPedal?(m==='pdf'?'\npedál ← →':'\npedál ↑ ↓'):'');
+  if(readerOpen())showMode(frac);
+  toast(msg);
 }
 $('mText').onclick=()=>setMode('text',0);
 $('mPdf').onclick=()=>setMode('pdf',0);
@@ -379,33 +381,37 @@ let rsT=0;
 addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>{if(readerOpen()&&st.mode==='pdf'&&PV.doc)layoutPdf(PV.frac)},200)});
 
 // ---------- Bluetooth pedál (M-Vave Cube Turner) posiela klávesy.
-// Text:  ľavý = štart/pauza, pravý = 10 riadkov nižšie (podržaný = 10 riadkov vyššie).
-// PDF:   ľavý = predošlá strana, pravý = ďalšia strana.
-// V oboch režimoch: ľavý podržaný 1 s = prepnutie Text <-> PDF.
+// Režim pedála určuje režim aplikácie:
+//   pedál NA VÝŠKU (podržať pravý pedál)  -> posiela ↑ ↓  -> Text (rolovanie)
+//   pedál NA ŠÍRKU (podržať ľavý pedál)   -> posiela ← →  -> PDF (listovanie)
+// Prvé stlačenie po zmene režimu pedála len prepne režim aplikácie (nič iné neurobí).
+// Text: ľavý = štart/pauza, pravý = 10 riadkov nižšie (podržaný = 10 vyššie).
+// PDF:  ľavý = predošlá strana, pravý = ďalšia strana.
 const LEFT=['ArrowLeft','ArrowUp','PageUp'],RIGHT=['ArrowRight','ArrowDown','PageDown',' ','Enter'];
-const HOLD_MODE=1000;
-let rightHeld=false,holdFired=false,holdTimer=0,lastKey=0,leftHeld=false,leftTimer=0;
+const orientOf=k=>(k==='ArrowUp'||k==='ArrowDown')?'p':(k==='ArrowLeft'||k==='ArrowRight')?'l':null;
+let pedalOrient=null;
+let rightHeld=false,holdFired=false,holdTimer=0,lastKey=0;
 function releaseRight(){clearTimeout(holdTimer);rightHeld=false;holdFired=false}
-function releaseLeft(){clearTimeout(leftTimer);leftHeld=false}
+const keyName=k=>({' ':'medzera',ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'}[k]||k);
 function onKey(e){
   lastKey=Date.now();
-  if(!readerOpen())return;
-  $('kb').textContent='Kláves: '+(e.key===' '?'medzera':e.key);
-  const pdf=st.mode==='pdf';
-  if(LEFT.includes(e.key)){
-    e.preventDefault();
-    if(e.repeat)return;
-    if(leftHeld)releaseLeft();            // stratené uvoľnenie (výpadok spojenia) = nový stisk
-    leftHeld=true;
-    const f=curFrac();                    // poloha pred akciou, použije sa pri prepnutí režimu
-    if(pdf)pdfStep(-1);else toggle();
-    leftTimer=setTimeout(()=>{leftHeld=false;setMode(pdf?'text':'pdf',f)},HOLD_MODE);
+  const pedal=LEFT.includes(e.key)||RIGHT.includes(e.key);
+  if(readerOpen()){$('kb').textContent='Kláves: '+keyName(e.key);if(pedal)e.preventDefault()}
+  if(!pedal&&e.key!=='+'&&e.key!=='-')return;
+  if(e.repeat)return;
+  const o=orientOf(e.key);
+  if(o){
+    // zmena režimu pedála (alebo prvé stlačenie, ak nesedí s režimom aplikácie)
+    const changed=pedalOrient?o!==pedalOrient:(o==='l')!==(st.mode==='pdf');
+    pedalOrient=o;
+    if(changed){releaseRight();const m=o==='l'?'pdf':'text';if(st.mode!==m){setMode(m,readerOpen()?curFrac():0,true);return}}
   }
+  if(!readerOpen())return;
+  const pdf=st.mode==='pdf';
+  if(LEFT.includes(e.key)){if(pdf)pdfStep(-1);else toggle()}
   else if(RIGHT.includes(e.key)){
-    e.preventDefault();
-    if(e.repeat)return;
     if(pdf){pdfStep(1);return}
-    if(rightHeld)releaseRight();
+    if(rightHeld)releaseRight();            // stratené uvoľnenie (výpadok spojenia) = nový stisk
     rightHeld=true;holdFired=false;
     holdTimer=setTimeout(()=>{holdFired=true;skip(-10);setTimeout(releaseRight,1500)},600);
   }
@@ -413,7 +419,6 @@ function onKey(e){
   else if(!pdf&&e.key==='-'){st.speed=Math.max(5,st.speed-5);apply();save()}
 }
 function onKeyUp(e){
-  if(LEFT.includes(e.key)&&leftHeld)releaseLeft();
   if(RIGHT.includes(e.key)&&rightHeld){
     clearTimeout(holdTimer);
     if(!holdFired&&readerOpen()&&st.mode!=='pdf')skip(10);
@@ -426,7 +431,7 @@ window.addEventListener('keyup',onKeyUp,true);
 const kbin=$('kbin');
 function initPedal(msg){
   try{kbin.focus({preventScroll:true})}catch(_){}
-  releaseRight();releaseLeft();
+  releaseRight();
   if(msg&&readerOpen())$('kb').textContent='Pedál pripravený – stlač ho';
 }
 document.addEventListener('pointerdown',()=>initPedal(false),true);
