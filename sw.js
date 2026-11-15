@@ -1,4 +1,4 @@
-const CACHE = "pantheon-v12";
+const CACHE = "pantheon-v13";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {
