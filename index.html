@@ -54,7 +54,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #bar .ttl small{color:var(--dim);font-weight:400;margin-left:8px}
 #text{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;min-height:0;font-family:var(--mono);cursor:pointer}
 #text::before{content:"";display:block;height:30vh}
-#text::after{content:"";display:block;height:80vh}
+#text::after{content:"";display:block;height:var(--tail,20vh)}
 .row{white-space:pre;line-height:1.3;font-size:var(--fs,26px)}
 .ch{color:var(--accent);font-weight:600;min-height:0}
 .ly{margin-bottom:.25em}
@@ -162,7 +162,7 @@ const save=()=>{try{localStorage.setItem('scrollbook',JSON.stringify(st))}catch(
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 const readerOpen=()=>!$('reader').hidden;
 
-$('count').textContent=SONGS.length+' piesní · v29';
+$('count').textContent=SONGS.length+' piesní · v30';
 // zoznam: abecedne s písmenami (ako 3Mband) alebo podľa poradia piesní
 const normT=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 const letterOf=s=>{const c=normT(s.title).replace(/^[^A-Z0-9]+/,'')[0]||'#';return /[A-Z]/.test(c)?c:'#'};
@@ -285,11 +285,12 @@ function setTextFrac(f){
 const curFrac=()=>st.mode==='pdf'?PV.frac:textFrac();
 
 // ---------- režimy: Text (rolovanie) a PDF (listovanie) – menia sa len tlačidlom alebo pedálom, nie otočením tabletu
+function setTail(){const t=$('text');if(t.clientHeight)t.style.setProperty('--tail',Math.round(t.clientHeight*0.2)+'px')}
 function showMode(frac){
   const pdf=st.mode==='pdf';
   $('text').hidden=pdf;$('ctrl').hidden=pdf;$('play2').hidden=pdf;$('back').hidden=!pdf;$('ped2').hidden=!pdf;
   $('pdfv').hidden=!pdf;$('pginfo').hidden=!pdf;$('fitseg').hidden=!pdf;
-  apply();
+  apply();setTail();
   if(pdf){stop();keepAwake(true);openPdf(frac)}
   else{PV.tok++;PV.gen++;keepAwake(false);requestAnimationFrame(()=>setTextFrac(frac))}
 }
@@ -438,7 +439,7 @@ $('pdfv').addEventListener('click',e=>{
   const r=$('pdfv').getBoundingClientRect();pdfStep(e.clientX-r.left<r.width*0.3?-1:1);
 });
 let rsT=0;
-addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>{if(readerOpen()&&st.mode==='pdf'&&PV.doc)layoutPdf(PV.frac)},200)});
+addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>{if(readerOpen())setTail();if(readerOpen()&&st.mode==='pdf'&&PV.doc)layoutPdf(PV.frac)},200)});
 
 // ---------- Logo: návrhy (logos.json), každý má Logo / 2 riadky / 1 riadok / Význam
 // PNG, aby sa dali podržaním uložiť do Fotiek; súbor sa načíta až pri otvorení okna
@@ -446,7 +447,7 @@ const VIEWS=['Logo','2 riadky','1 riadok','Význam'];
 let LSETS=null,lsetsP=null,logoS=0,logoV=0;
 const pngCache=new Map();
 function loadLogos(){
-  if(!lsetsP)lsetsP=fetch('logos-29.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
+  if(!lsetsP)lsetsP=fetch('logos-30.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
   return lsetsP;
 }
 function svgToPng(svg,w,h){
@@ -466,7 +467,7 @@ async function showLogos(){
   $('logos').hidden=false;
   if(!LSETS){
     $('logoMsg').hidden=false;$('logoMsg').textContent='Načítavam logá…';$('logoImg').hidden=true;$('logoText').hidden=true;
-    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-29.json).';return}
+    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-30.json).';return}
     $('logoMsg').hidden=true;
   }
   logoS=Math.max(0,Math.min(LSETS.length-1,logoS));
