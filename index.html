@@ -162,7 +162,7 @@ const save=()=>{try{localStorage.setItem('scrollbook',JSON.stringify(st))}catch(
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 const readerOpen=()=>!$('reader').hidden;
 
-$('count').textContent=SONGS.length+' piesní · v30';
+$('count').textContent=SONGS.length+' piesní · v31';
 // zoznam: abecedne s písmenami (ako 3Mband) alebo podľa poradia piesní
 const normT=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 const letterOf=s=>{const c=normT(s.title).replace(/^[^A-Z0-9]+/,'')[0]||'#';return /[A-Z]/.test(c)?c:'#'};
@@ -187,7 +187,7 @@ $('az').addEventListener('click',e=>{
 $('songs').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(b)open(+b.dataset.i)});
 
 function open(i){
-  cur=i;const s=SONGS[i];st.speed=s.speed||30;setTimeout(()=>initPedal(false),0);
+  cur=i;armAt=Date.now();pedalWarn=false;pedalUI();const s=SONGS[i];st.speed=s.speed||30;setTimeout(()=>initPedal(false),0);
   $('ttl').innerHTML=esc(s.title)+'<small>'+esc(s.artist)+'</small>';
   $('rtag').textContent=s.tag||'';$('rtag').hidden=!s.tag;
   $('text').innerHTML=s.lines.map(l=>'<div class="ln">'+(l=>{
@@ -447,7 +447,7 @@ const VIEWS=['Logo','2 riadky','1 riadok','Význam'];
 let LSETS=null,lsetsP=null,logoS=0,logoV=0;
 const pngCache=new Map();
 function loadLogos(){
-  if(!lsetsP)lsetsP=fetch('logos-30.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
+  if(!lsetsP)lsetsP=fetch('logos-31.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
   return lsetsP;
 }
 function svgToPng(svg,w,h){
@@ -467,7 +467,7 @@ async function showLogos(){
   $('logos').hidden=false;
   if(!LSETS){
     $('logoMsg').hidden=false;$('logoMsg').textContent='Načítavam logá…';$('logoImg').hidden=true;$('logoText').hidden=true;
-    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-30.json).';return}
+    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-31.json).';return}
     $('logoMsg').hidden=true;
   }
   logoS=Math.max(0,Math.min(LSETS.length-1,logoS));
@@ -513,11 +513,18 @@ $('logoClose').onclick=()=>{$('logos').hidden=true};
 const LEFT=['ArrowLeft','ArrowUp','PageUp'],RIGHT=['ArrowRight','ArrowDown','PageDown',' ','Enter'];
 const orientOf=k=>(k==='ArrowUp'||k==='ArrowDown')?'p':(k==='ArrowLeft'||k==='ArrowRight')?'l':null;
 let pedalOrient=null;
-let lastKey=0,pedalSeen=false;
-function pedalUI(){['ped','ped2'].forEach(id=>{const b=$(id);b.classList.toggle('pedwarn',!pedalSeen);b.textContent=pedalSeen?'Pedál ✓':'Pedál ⚠'})}
+let lastKey=0,armAt=Date.now(),pedalWarn=false;
+// iPad nehlási odpojenie Bluetooth pedála, preto sa sleduje ticho: ak nie je zapnuté rolovanie a dlho nepríde žiadna klávesa, tlačidlo Pedál zbelie červené
+function pedalUI(){['ped','ped2'].forEach(id=>{const b=$(id);b.classList.toggle('pedwarn',pedalWarn);b.textContent=pedalWarn?'Pedál ⚠':'Pedál ⟳'})}
+function pedalCheck(){
+  const idle=Date.now()-Math.max(lastKey,armAt),lim=st.mode==='pdf'?60000:20000;
+  const w=readerOpen()&&$('logos').hidden&&!playing&&idle>lim;
+  if(w!==pedalWarn){pedalWarn=w;pedalUI()}
+}
+setInterval(pedalCheck,1500);
 function onKey(e){
   lastKey=Date.now();
-  if(!pedalSeen){pedalSeen=true;pedalUI()}
+  if(pedalWarn){pedalWarn=false;pedalUI()}
   if(!$('logos').hidden){
     if(e.key==='Escape')$('logos').hidden=true;
     else if(LEFT.includes(e.key)||RIGHT.includes(e.key)){e.preventDefault();if(!e.repeat)logoGo(LEFT.includes(e.key)?-1:1)}
@@ -549,7 +556,7 @@ window.addEventListener('keydown',onKey,true);
 const kbin=$('kbin');
 function initPedal(msg){
   try{kbin.focus({preventScroll:true})}catch(_){}
-  if(msg&&readerOpen())toast(pedalSeen?'Pedál funguje':'Zapni M-Vave Cube Turner\na stlač pedál',1800);
+  if(msg&&readerOpen()){armAt=Date.now();toast('Stlač pedál –\nak nereaguje, zapni M-Vave Cube Turner',2200)}
 }
 document.addEventListener('pointerdown',()=>initPedal(false),true);
 kbin.addEventListener('blur',()=>setTimeout(()=>{if(!document.hidden)initPedal(false)},250));
@@ -558,7 +565,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)initPedal(
 $('ped').addEventListener('click',()=>initPedal(true));$('ped2').addEventListener('click',()=>initPedal(true));
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden)stop();
-  else{pedalSeen=false;pedalUI()}
+  else{armAt=Date.now();pedalCheck()}
   if(!document.hidden&&readerOpen()&&st.mode==='pdf'){wake=null;keepAwake(true)}
 });
 apply();initPedal(false);pedalUI();
