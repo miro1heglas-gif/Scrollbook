@@ -50,8 +50,8 @@ h1{font-size:1.5rem;margin:0;font-weight:600;text-wrap:balance;display:flex;alig
 #songs .a{color:var(--dim);font-size:1.35rem;display:block;margin-top:3px}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #bar{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;padding-block:10px;border-bottom:1px solid var(--line)}
-#bar .ttl{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#bar .ttl small{color:var(--dim);font-weight:400;margin-left:8px}
+#bar .ttl{flex:1 1 300px;min-width:0;font-weight:600;font-size:2rem;line-height:1.15}
+#bar .ttl small{display:block;font-size:2rem;color:var(--dim);font-weight:400;margin:2px 0 0}
 #text{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;min-height:0;font-family:var(--mono);cursor:pointer}
 #text::before{content:"";display:block;height:30vh}
 #text::after{content:"";display:block;height:var(--tail,20vh)}
@@ -63,7 +63,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .note{color:var(--note);font-weight:600}
 .gap{height:.8em}
 .nochords .ch{display:none}
-.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);justify-content:center}
+.ctrl{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);justify-content:flex-start}
 .ctrl button,#bar button{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;min-width:48px;min-height:48px;padding:0 14px;font:600 1rem var(--sans);cursor:pointer}
 #bar .big{background:var(--accent);color:var(--on-accent);border-color:var(--accent);min-height:60px;min-width:140px;font-size:1.5rem;padding:0 28px}
 .ctrl .play{background:var(--accent);color:var(--on-accent);border-color:var(--accent);min-width:110px}
@@ -73,7 +73,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tgl[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 [hidden]{display:none!important}
 #rtag{flex:none;font-family:var(--mono);font-weight:800;font-size:2rem;line-height:1;white-space:nowrap;background:#ffe14d;color:#1a1204;padding:10px 16px;border-radius:9px;box-shadow:0 0 0 2px rgba(255,225,77,.35)}
-.ctrl .backbig{background:var(--accent);color:var(--on-accent);border-color:var(--accent);min-height:60px;min-width:150px;font-size:1.4rem;padding:0 26px}
+.ctrl .play,.ctrl .backbig{background:var(--accent);color:var(--on-accent);border-color:var(--accent);min-height:60px;min-width:160px;font-size:1.4rem;padding:0 26px}
+.ctrl .backbig{margin-left:auto}
 button.pedwarn{background:#ff4d3d!important;color:#fff!important;border-color:#ff4d3d!important;animation:pw 1.1s ease-in-out infinite}
 @keyframes pw{0%,100%{box-shadow:0 0 0 0 rgba(255,77,61,.7)}50%{box-shadow:0 0 0 9px rgba(255,77,61,0)}}
 .hrow{display:flex;gap:8px;align-items:center}
@@ -125,15 +126,14 @@ button.pedwarn{background:#ff4d3d!important;color:#fff!important;border-color:#f
     <div class="seg" id="fitseg" role="group" aria-label="Veľkosť PDF" hidden><button id="fPage">Strana</button><button id="fWidth">Šírka</button></div>
     <div class="seg" role="group" aria-label="Režim zobrazenia"><button id="bPdf">PDF</button><button id="bText">Scroll</button></div>
     <button id="ped2" aria-label="Pedál – skontrolovať pripojenie">Pedál ⟳</button>
-    <button class="big" id="play2">Štart</button>
   </div>
   <div id="text" tabindex="0" aria-label="Text piesne, klepnutím spustíš alebo zastavíš posúvanie"></div>
   <div id="pdfv" hidden aria-label="PDF – klepnutím vľavo predchádzajúca, vpravo ďalšia strana"><div id="pin"></div><div id="pmsg"></div></div>
   <div class="ctrl" id="ctrl">
-    <button class="backbig" id="back2" aria-label="Späť na zoznam">‹ Zoznam</button>
     <button class="play" id="play">Štart</button>
     <div class="grp"><span class="lab">Rýchlosť</span><button id="slow" aria-label="Pomalšie">−</button><span class="val" id="spd"></span><button id="fast" aria-label="Rýchlejšie">+</button></div>
     <button id="ped" aria-label="Pripraviť pedál">Pedál ⟳</button>
+    <button class="backbig" id="back2" aria-label="Späť na zoznam">Zoznam ›</button>
   </div>
 </div>
 
@@ -158,7 +158,7 @@ const save=()=>{try{localStorage.setItem('scrollbook',JSON.stringify(st))}catch(
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 const readerOpen=()=>!$('reader').hidden;
 
-$('count').textContent=SONGS.length+' piesní · v32';
+$('count').textContent=SONGS.length+' piesní · v33';
 // zoznam: abecedne s písmenami (ako 3Mband) alebo podľa poradia piesní
 const normT=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 const letterOf=s=>{const c=normT(s.title).replace(/^[^A-Z0-9]+/,'')[0]||'#';return /[A-Z]/.test(c)?c:'#'};
@@ -222,16 +222,16 @@ function tick(t){
   raf=requestAnimationFrame(tick);
 }
 function start(){
-  if(playing||st.mode==='pdf')return;playing=true;$('play').textContent=$('play2').textContent='Pauza';
+  if(playing||st.mode==='pdf')return;playing=true;$('play').textContent='Pauza';
   pos=$('text').scrollTop;last=performance.now();raf=requestAnimationFrame(tick);
   keepAwake(true);
 }
 function stop(){
-  playing=false;cancelAnimationFrame(raf);$('play').textContent=$('play2').textContent='Štart';
+  playing=false;cancelAnimationFrame(raf);$('play').textContent='Štart';
   if(st.mode!=='pdf'||!readerOpen())keepAwake(false);
 }
 const toggle=()=>playing?stop():start();
-$('play').onclick=toggle;$('play2').onclick=toggle;
+$('play').onclick=toggle;
 $('text').addEventListener('click',toggle);
 $('slow').onclick=()=>{st.speed=Math.max(5,st.speed-5);apply();save()};
 $('fast').onclick=()=>{st.speed=Math.min(200,st.speed+5);apply();save()};
@@ -278,7 +278,7 @@ const curFrac=()=>st.mode==='pdf'?PV.frac:textFrac();
 function setTail(){const t=$('text');if(t.clientHeight)t.style.setProperty('--tail',Math.round(t.clientHeight*0.2)+'px')}
 function showMode(frac){
   const pdf=st.mode==='pdf';
-  $('text').hidden=pdf;$('ctrl').hidden=pdf;$('play2').hidden=pdf;$('back').hidden=!pdf;$('ped2').hidden=!pdf;
+  $('text').hidden=pdf;$('ctrl').hidden=pdf;$('back').hidden=!pdf;$('ped2').hidden=!pdf;
   $('pdfv').hidden=!pdf;$('pginfo').hidden=!pdf;$('fitseg').hidden=!pdf;
   apply();setTail();
   if(pdf){stop();keepAwake(true);openPdf(frac)}
@@ -437,7 +437,7 @@ const VIEWS=['Logo','2 riadky','1 riadok','Význam'];
 let LSETS=null,lsetsP=null,logoS=0,logoV=0;
 const pngCache=new Map();
 function loadLogos(){
-  if(!lsetsP)lsetsP=fetch('logos-32.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
+  if(!lsetsP)lsetsP=fetch('logos-33.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
   return lsetsP;
 }
 function svgToPng(svg,w,h){
@@ -457,7 +457,7 @@ async function showLogos(){
   $('logos').hidden=false;
   if(!LSETS){
     $('logoMsg').hidden=false;$('logoMsg').textContent='Načítavam logá…';$('logoImg').hidden=true;$('logoText').hidden=true;
-    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-32.json).';return}
+    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-33.json).';return}
     $('logoMsg').hidden=true;
   }
   logoS=Math.max(0,Math.min(LSETS.length-1,logoS));
