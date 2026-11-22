@@ -1,7 +1,7 @@
-const CACHE = "pantheon-v33";
+const CACHE = "pantheon-v34";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 // PDF a knižnica PDF.js: uložia sa, ak sú na serveri (chýbajúci súbor nezablokuje aktualizáciu)
-const OPTIONAL = ["pdf.min.js", "pdf.worker.min.js", "logos-33.json", "pdf-01-bedna-od-whiskey.pdf", "pdf-02-beds-are-burning.pdf", "pdf-03-blitzkrieg-bop.pdf", "pdf-05-wonderwall.pdf", "pdf-06-whatever-you-want.pdf", "pdf-07-born-to-be-wild.pdf", "pdf-08-should-i-stay-or-should-i-go.pdf", "pdf-09-personal-jesus.pdf", "pdf-10-stastnej-chlap.pdf", "pdf-11-have-you-ever-seen-the-rain.pdf", "pdf-12-englishman-in-new-york.pdf", "pdf-14-svaz-ceskych-bohemu.pdf", "pdf-15-kdo-z-nas-je-vinny.pdf", "pdf-16-black-night.pdf", "pdf-17-zaneta.pdf", "pdf-18-hysteria.pdf", "pdf-19-feel.pdf"];
+const OPTIONAL = ["pdf.min.js", "pdf.worker.min.js", "logos-34.json", "pdf-01-bedna-od-whiskey.pdf", "pdf-02-beds-are-burning.pdf", "pdf-03-blitzkrieg-bop.pdf", "pdf-05-wonderwall.pdf", "pdf-06-whatever-you-want.pdf", "pdf-07-born-to-be-wild.pdf", "pdf-08-should-i-stay-or-should-i-go.pdf", "pdf-09-personal-jesus.pdf", "pdf-10-stastnej-chlap.pdf", "pdf-11-have-you-ever-seen-the-rain.pdf", "pdf-12-englishman-in-new-york.pdf", "pdf-14-svaz-ceskych-bohemu.pdf", "pdf-15-kdo-z-nas-je-vinny.pdf", "pdf-16-black-night.pdf", "pdf-17-zaneta.pdf", "pdf-18-hysteria.pdf", "pdf-19-feel.pdf"];
 
 self.addEventListener("install", (e) => {
   // cache:"reload" obíde HTTP cache prehliadača (GitHub Pages drží súbory ~10 min), aby sa stiahla naozaj nová verzia
