@@ -133,11 +133,7 @@ button.pedwarn{background:#ff4d3d!important;color:#fff!important;border-color:#f
     <button class="backbig" id="back2" aria-label="Späť na zoznam">‹ Zoznam</button>
     <button class="play" id="play">Štart</button>
     <div class="grp"><span class="lab">Rýchlosť</span><button id="slow" aria-label="Pomalšie">−</button><span class="val" id="spd"></span><button id="fast" aria-label="Rýchlejšie">+</button></div>
-    <div class="grp"><span class="lab">Písmo</span><button id="fs-" aria-label="Menšie písmo">A−</button><button id="fs+" aria-label="Väčšie písmo">A+</button></div>
-    <button class="tgl" id="chords" aria-pressed="true">Akordy</button>
     <button id="ped" aria-label="Pripraviť pedál">Pedál ⟳</button>
-    <button id="skip" aria-label="10 riadkov nižšie">10 ↓</button>
-    <button id="top" aria-label="Na začiatok">⤒</button>
   </div>
 </div>
 
@@ -162,7 +158,7 @@ const save=()=>{try{localStorage.setItem('scrollbook',JSON.stringify(st))}catch(
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 const readerOpen=()=>!$('reader').hidden;
 
-$('count').textContent=SONGS.length+' piesní · v31';
+$('count').textContent=SONGS.length+' piesní · v32';
 // zoznam: abecedne s písmenami (ako 3Mband) alebo podľa poradia piesní
 const normT=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 const letterOf=s=>{const c=normT(s.title).replace(/^[^A-Z0-9]+/,'')[0]||'#';return /[A-Z]/.test(c)?c:'#'};
@@ -204,7 +200,6 @@ function apply(){
   document.documentElement.style.setProperty('--fs',st.fs+'px');
   $('spd').textContent=st.speed;
   $('text').classList.toggle('nochords',!st.chords);
-  $('chords').setAttribute('aria-pressed',st.chords);
   const pr=(id,on)=>$(id).setAttribute('aria-pressed',on);
   pr('mText',st.mode==='text');pr('mPdf',st.mode==='pdf');
   pr('bText',st.mode==='text');pr('bPdf',st.mode==='pdf');
@@ -240,11 +235,6 @@ $('play').onclick=toggle;$('play2').onclick=toggle;
 $('text').addEventListener('click',toggle);
 $('slow').onclick=()=>{st.speed=Math.max(5,st.speed-5);apply();save()};
 $('fast').onclick=()=>{st.speed=Math.min(200,st.speed+5);apply();save()};
-$('fs-').onclick=()=>{st.fs=Math.max(14,st.fs-2);apply();save()};
-$('fs+').onclick=()=>{st.fs=Math.min(60,st.fs+2);apply();save()};
-$('chords').onclick=()=>{st.chords=!st.chords;apply();save()};
-$('skip').onclick=()=>skip(10);
-$('top').onclick=()=>{stop();$('text').scrollTop=0;pos=0};
 const goBack=()=>{PV.tok++;PV.gen++;stop();keepAwake(false);$('reader').hidden=true;$('list').hidden=false};
 $('back').onclick=goBack;$('back2').onclick=goBack;
 let animRaf=0;
@@ -447,7 +437,7 @@ const VIEWS=['Logo','2 riadky','1 riadok','Význam'];
 let LSETS=null,lsetsP=null,logoS=0,logoV=0;
 const pngCache=new Map();
 function loadLogos(){
-  if(!lsetsP)lsetsP=fetch('logos-31.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
+  if(!lsetsP)lsetsP=fetch('logos-32.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>LSETS=d).catch(e=>{lsetsP=null;throw e});
   return lsetsP;
 }
 function svgToPng(svg,w,h){
@@ -467,7 +457,7 @@ async function showLogos(){
   $('logos').hidden=false;
   if(!LSETS){
     $('logoMsg').hidden=false;$('logoMsg').textContent='Načítavam logá…';$('logoImg').hidden=true;$('logoText').hidden=true;
-    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-31.json).';return}
+    try{await loadLogos()}catch(e){$('logoMsg').textContent='Logá sa nepodarilo načítať (súbor logos-32.json).';return}
     $('logoMsg').hidden=true;
   }
   logoS=Math.max(0,Math.min(LSETS.length-1,logoS));
