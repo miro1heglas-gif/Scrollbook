@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="./ikony/ikona.svg" type="image/svg+xml">
+<link rel="icon" href="./ikony/ikona-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="./ikony/apple-touch-icon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#F3F6F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1313" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Info Designer">
+<meta name="application-name" content="Info Designer">
+<title>Snímka – vykreslenie (komponent)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes wzmarq{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+</style>
+</helmet>
+<div translate="no" style="{{ wrapS }}">
+  <div style="{{ innerS }}">
+    <sc-if value="{{ isInfo }}" hint-placeholder-val="{{ true }}">
+      <div style="{{ infoS }}"><div style="{{ tS }}">{{ title }}</div><div style="{{ xS }}">{{ text }}</div></div>
+    </sc-if>
+    <sc-if value="{{ isPhoto }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ photoS }}"><div style="{{ sunS }}"></div><div style="{{ capS }}">{{ title }}</div></div>
+    </sc-if>
+    <sc-if value="{{ isDeps }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ depsS }}">
+        <div style="{{ dhS }}">{{ title }}</div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="4">
+          <div style="{{ rowS }}"><span style="{{ r.bS }}">{{ r.line }}</span><span style="{{ r.dS }}">{{ r.dest }}</span><span style="{{ r.tS }}">{{ r.min }}</span></div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isLedText }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ ledS }}"><span style="{{ ledTxS }}">{{ ledTxt }}</span></div>
+    </sc-if>
+    <sc-if value="{{ isLedClock }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ clkS }}"><span style="{{ clkTimeS }}">{{ clkTime }}</span><sc-if value="{{ clkHasDate }}" hint-placeholder-val="{{ true }}"><span style="{{ clkDateS }}">{{ clkDate }}</span></sc-if></div>
+    </sc-if>
+    <sc-if value="{{ isLedDeps }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ ledDepsS }}">
+        <sc-for list="{{ ledRows }}" as="r" hint-placeholder-count="3">
+          <div style="{{ ledRowS }}"><span style="{{ ledNumS }}">{{ r.line }}</span><span style="{{ ledDestS }}">{{ r.dest }}</span><span style="{{ ledMinS }}">{{ r.min }}</span></div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isTpl }}" hint-placeholder-val="{{ false }}">
+      <sc-for list="{{ tplSecs }}" as="c" hint-placeholder-count="3">
+        <div style="{{ c.boxS }}">
+          <sc-if value="{{ c.isText }}" hint-placeholder-val="{{ true }}"><div style="{{ c.txS }}">{{ c.text }}</div></sc-if>
+          <sc-if value="{{ c.isPhoto }}" hint-placeholder-val="{{ false }}"><div style="{{ c.phS }}"></div><sc-if value="{{ c.hasCap }}" hint-placeholder-val="{{ true }}"><div style="{{ c.capS }}">{{ c.cap }}</div></sc-if></sc-if>
+          <sc-if value="{{ c.isVideo }}" hint-placeholder-val="{{ false }}"><div style="{{ c.phS }}"></div><div style="{{ c.cenS }}"><div style="{{ c.playS }}"><div style="{{ c.triS }}"></div></div></div><div style="{{ c.capS }}">{{ c.vid }}</div></sc-if>
+          <sc-if value="{{ c.isWeb }}" hint-placeholder-val="{{ false }}"><div style="{{ c.webS }}"><div style="{{ c.urlS }}">{{ c.url }}</div><div style="{{ c.webBS }}"><div style="{{ c.wl1 }}"></div><div style="{{ c.wl2 }}"></div><div style="{{ c.wl2 }}"></div><div style="{{ c.wl3 }}"></div></div></div></sc-if>
+          <sc-if value="{{ c.isMap }}" hint-placeholder-val="{{ false }}"><div style="{{ c.mapS }}"></div><div style="{{ c.riverS }}"></div><div style="{{ c.pinS }}"></div><div style="{{ c.mapLS }}">{{ c.mapL }}</div></sc-if>
+          <sc-if value="{{ c.isWeather }}" hint-placeholder-val="{{ false }}"><div style="{{ c.wxS }}"><div style="{{ c.wxTS }}">7 °C</div><div style="{{ c.wxDS }}">Riečany · zamračené</div><div style="{{ c.wxFS }}">Po 6° · Ut 4° · St 8°</div></div></sc-if>
+          <sc-if value="{{ c.isLine }}" hint-placeholder-val="{{ false }}"><div style="{{ c.lnS }}"><div style="{{ c.lnHS }}"><span style="{{ c.lnBS }}">{{ c.lnN }}</span><span>{{ c.lnDir }}</span></div><sc-for list="{{ c.lnStops }}" as="st" hint-placeholder-count="4"><div style="{{ st.rS }}"><span style="{{ st.dS }}"></span><span>{{ st.n }}</span></div></sc-for></div></sc-if>
+          <sc-if value="{{ c.isMenu }}" hint-placeholder-val="{{ false }}"><div style="{{ c.mnS }}"><sc-for list="{{ c.tiles }}" as="tl" hint-placeholder-count="4"><div style="{{ tl.s }}">{{ tl.n }}</div></sc-for></div></sc-if>
+          <sc-if value="{{ c.isCal }}" hint-placeholder-val="{{ false }}"><div style="{{ c.calS }}"><div style="{{ c.calHS }}">{{ c.calH }}</div><div style="{{ c.calGS }}"><sc-for list="{{ c.days }}" as="dd" hint-placeholder-count="30"><span style="{{ dd.s }}">{{ dd.n }}</span></sc-for></div></div></sc-if>
+          <sc-if value="{{ c.isClock }}" hint-placeholder-val="{{ false }}"><div style="{{ c.ckS }}"><div style="{{ c.ckTS }}">{{ c.ckT }}</div><div style="{{ c.ckDS }}">{{ c.ckD }}</div></div></sc-if>
+          <sc-if value="{{ c.isTt }}" hint-placeholder-val="{{ false }}"><div style="{{ c.ttS }}"><div style="{{ c.ttHS }}">{{ c.ttH }}</div><sc-for list="{{ c.ttRows }}" as="r" hint-placeholder-count="4"><div style="{{ r.rS }}"><span style="{{ r.hS }}">{{ r.h }}</span><span style="{{ r.mS }}">{{ r.m }}</span></div></sc-for></div></sc-if>
+          <sc-if value="{{ c.isDeps }}" hint-placeholder-val="{{ false }}"><div style="{{ c.dpS }}"><sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="3"><div style="{{ r.rowS }}"><span style="{{ r.bS }}">{{ r.line }}</span><span style="{{ r.dS }}">{{ r.dest }}</span><span style="{{ r.tS }}">{{ r.min }}</span></div></sc-for></div></sc-if>
+        </div>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{ isLed }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ dotS }}"></div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":342,"height":192},"sx":{"editor":"text","default":""},"kind":{"editor":"text","default":"info"},"dev":{"editor":"text","default":"lcd"},"title":{"editor":"text","default":"Úvod"},"text":{"editor":"text","default":""},"bg":{"editor":"color","default":"#0E8080"},"img":{"editor":"color","default":"#F2A65A"},"w":{"editor":"text","default":"342"},"r":{"editor":"text","default":"8"},"ledsize":{"editor":"text","default":"M"},"ledalign":{"editor":"text","default":"left"},"ledcol":{"editor":"text","default":""},"ledbg":{"editor":"text","default":""}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props || {};
+    const dev = p.dev || 'lcd';
+    const D = { lcd: [480, 270], portrait: [270, 480], p31: [270, 480], epaper: [270, 480], vehicle: [576, 96], stop: [384, 128], ledclock: [384, 192], ledtall: [384, 480] }[dev] || [480, 270];
+    const W = D[0], H = D[1];
+    const w = parseFloat(p.w) || 342;
+    const k = w / W;
+    const led = dev === 'vehicle' || dev === 'stop' || dev === 'ledclock' || dev === 'ledtall';
+    const ep = dev === 'epaper'; const tall = dev === 'ledtall';
+    const kind = p.kind || 'info';
+    const bg = p.bg || '#0E8080';
+    const port = dev === 'portrait' || dev === 'p31' || ep;
+    const FONT = "'Source Sans 3', system-ui, sans-serif";
+    const MONO = "'JetBrains Mono', ui-monospace, monospace";
+    const DEST = { '3': 'Železničná stanica', '5': 'Vlčince', '14': 'Sídlisko Sever', '25': 'Letisko', '31': 'Univerzita', 'N1': 'Centrum' };
+    const LC = { '3': '#0E8080', '5': '#C8322B', '14': '#2F62B0', '25': '#E07A2B', '31': '#5B2A86', 'N1': '#1F2323' };
+    const MIN = ['2 min', '6 min', '9 min', '14 min', '18 min', '23 min'];
+    let lines = String(p.text || '').match(/N?\d+/g) || [];
+    if (!lines.length) lines = ['3', '5', '14', '25'];
+    const all = lines.map((l, i) => ({ line: l, dest: DEST[l] || 'Centrum', min: MIN[i % MIN.length], col: LC[l] || '#0E8080' }));
+    const rows = all.slice(0, port ? 6 : 4).map((r) => ({
+      line: r.line, dest: r.dest, min: r.min,
+      bS: 'min-width:' + (port ? 34 : 44) + 'px;height:' + (port ? 28 : 34) + 'px;border-radius:6px;background:' + r.col + ';color:#fff;font-weight:700;font-size:' + (port ? 18 : 22) + 'px;display:flex;align-items:center;justify-content:center',
+      dS: 'flex:1;min-width:0;font-size:' + (port ? 16 : 22) + 'px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
+      tS: 'font-size:' + (port ? 16 : 22) + 'px;font-weight:700;color:#FFD27A;white-space:nowrap'
+    }));
+    const FS = { XS: 16, S: 22, M: 30, L: 40, XL: 52 }[p.ledsize || 'M'] || 30;
+    const col = p.ledcol || '';
+    const fld = p.ledbg || '';
+    const amber = '#FFB000';
+    const txtCol = col || (fld ? '#050505' : amber);
+    const al = p.ledalign || 'left';
+    const lt = p.title || '';
+    const glow = (c) => '0 0 6px ' + c + '99';
+    const one = dev === 'vehicle';
+    const mq = one && lt.length * (FS * 0.62 + 1) > W - 28;
+    const isLedClock = led && kind === 'clock';
+    const isLedDeps = led && kind === 'deps';
+    const now = new Date(); const p2 = (n) => ('0' + n).slice(-2); const fl = String(p.text || '');
+    const clkSec = fl.indexOf('s') >= 0;
+    const ABS = [1, 3, 6, 9, 12, 16, 21, 25, 31, 38];
+    const tallRows = ABS.map((m, i) => { const r = all[i % all.length]; const d = new Date(now.getTime() + m * 60000); return { line: r.line, dest: r.dest.replace('Železničná stanica', 'Žel. stanica'), min: p2(d.getHours()) + ':' + p2(d.getMinutes()) }; });
+    // snímka podľa vzoru: sekcie (poloha v %, obsah) prídu ako JSON v prop sx
+    let tplSecs = [];
+    const isTpl = !led && kind === 'tpl';
+    if (isTpl) {
+      let o = {}; try { o = JSON.parse(p.sx || '{}'); } catch (e) { o = {}; }
+      tplSecs = (o.secs || []).map((c) => {
+        const cw = W * c.w / 100, ch = H * c.h / 100; const pad = Math.round(Math.min(cw, ch) * 0.12) + 6;
+        const fs = Math.round(Math.max(13, Math.min(port ? 26 : 34, ch * 0.34, cw * 0.11)));
+        const ls = String(c.text || '').match(/N?\d+/g) || ['3', '5', '14'];
+        const rf = Math.round(Math.max(11, Math.min(20, ch / 8)));
+        const nr = Math.max(1, Math.min(port ? 6 : 4, Math.floor((ch - 2 * pad) / (rf * 1.9))));
+        const narrow = cw < rf * 11;
+        const rows = ls.slice(0, nr).map((l, i) => ({ line: l, dest: DEST[l] || 'Centrum', min: MIN[i % MIN.length], rowS: 'display:flex;align-items:center;gap:' + Math.round(rf * 0.5) + 'px' + (narrow ? ';justify-content:space-between' : ''),
+          bS: 'min-width:' + Math.round(rf * 2) + 'px;height:' + Math.round(rf * 1.5) + 'px;border-radius:4px;background:' + (LC[l] || '#0E8080') + ';color:#fff;font-weight:700;font-size:' + rf + 'px;display:flex;align-items:center;justify-content:center;flex:none',
+          dS: narrow ? 'display:none' : 'flex:1;min-width:0;font-size:' + rf + 'px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis', tS: 'font-size:' + rf + 'px;font-weight:700;color:#FFD27A;white-space:nowrap' }));
+        // cestovný poriadok linky: hodiny a minúty (ukážka, v prevádzke zo zdroja dát)
+        const tl = String(c.line || '5'); const iv = { '3': 15, '5': 20, '14': 30, '25': 30, '31': 20 }[tl] || 20; const off = (parseInt(tl, 10) * 7) % iv;
+        const mins = []; for (let m = off; m < 60; m += iv) mins.push(('0' + m).slice(-2));
+        const tf = Math.round(Math.max(11, Math.min(port ? 18 : 20, ch / 9))); const h0 = new Date().getHours();
+        const ntt = Math.max(1, Math.floor((ch - 2 * pad - tf * 1.6) / (tf * 1.5)));
+        const ttRows = Array.from({ length: Math.min(ntt, 8) }, (_, i) => ({ h: String((h0 + i) % 24), m: mins.join('  '), rS: 'display:flex;gap:' + Math.round(tf * 0.6) + 'px;align-items:baseline;white-space:nowrap;overflow:hidden', hS: 'min-width:' + Math.round(tf * 1.4) + 'px;text-align:right;font-weight:700;color:#FFD27A;font-size:' + tf + 'px', mS: 'color:#fff;font-size:' + tf + 'px;font-weight:600;letter-spacing:.5px' }));
+        // ďalšie typy obsahu (ukážky; v prevádzke zo zdrojov dát)
+        const now2 = new Date(); const p2x = (n) => ('0' + n).slice(-2);
+        const LS = { '3': ['Železničná stanica', 'Hlavná stanica', 'Námestie SNP', 'Radnica', 'Bulvár', 'Nemocnica'], '5': ['Vlčince', 'Bulvár', 'Námestie SNP', 'Hlavná stanica', 'Autobusová stanica'], '14': ['Sídlisko Sever', 'Univerzita', 'Nemocnica', 'Hlavná stanica'], '25': ['Letisko', 'Priemyselný park', 'Hlavná stanica'], '31': ['Univerzita', 'Obchodné centrum Juh', 'Aquapark', 'Hlavná stanica'] }[tl] || [];
+        const nst = Math.max(2, Math.min(LS.length, Math.floor((ch - 2 * pad - tf * 1.8) / (tf * 1.55))));
+        const tiles = String(c.tiles || '').split(',').map((x) => x.trim()).filter(Boolean).slice(0, 4);
+        const tcols = tiles.length > 2 ? 2 : 1;
+        const MN = ['január', 'február', 'marec', 'apríl', 'máj', 'jún', 'júl', 'august', 'september', 'október', 'november', 'december'];
+        const dim = new Date(now2.getFullYear(), now2.getMonth() + 1, 0).getDate(); const cf = Math.round(Math.max(8, Math.min(16, Math.min(cw / 9, ch / 9))));
+        const ext = {
+          isVideo: c.type === 'video', vid: c.vid || '', cenS: 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center', playS: 'width:' + Math.round(fs * 2.2) + 'px;height:' + Math.round(fs * 2.2) + 'px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center', triS: 'width:0;height:0;margin-left:' + Math.round(fs * 0.25) + 'px;border-left:' + Math.round(fs * 0.8) + 'px solid #fff;border-top:' + Math.round(fs * 0.5) + 'px solid transparent;border-bottom:' + Math.round(fs * 0.5) + 'px solid transparent',
+          isWeb: c.type === 'web', url: String(c.url || '').replace(/^https?:\/\//, ''), webS: 'position:absolute;inset:0;background:#fff;display:flex;flex-direction:column', urlS: 'flex:none;padding:' + Math.round(fs * 0.3) + 'px ' + Math.round(fs * 0.5) + 'px;background:#E4E8E8;color:#3F4848;font-size:' + Math.round(fs * 0.6) + 'px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis', webBS: 'flex:1;padding:' + Math.round(pad * 0.7) + 'px;display:flex;flex-direction:column;gap:' + Math.round(fs * 0.4) + 'px', wl1: 'height:' + Math.round(fs * 0.9) + 'px;width:70%;background:#0E8080;border-radius:3px', wl2: 'height:' + Math.round(fs * 0.45) + 'px;width:100%;background:#D5DCDC;border-radius:3px', wl3: 'height:' + Math.round(fs * 0.45) + 'px;width:60%;background:#D5DCDC;border-radius:3px',
+          isMap: c.type === 'map', mapS: 'position:absolute;inset:0;background-color:#E7EEE3;background-image:repeating-linear-gradient(90deg,transparent 0 ' + Math.round(cw / 4) + 'px,#fff ' + Math.round(cw / 4) + 'px ' + (Math.round(cw / 4) + 5) + 'px),repeating-linear-gradient(0deg,transparent 0 ' + Math.round(ch / 3) + 'px,#fff ' + Math.round(ch / 3) + 'px ' + (Math.round(ch / 3) + 5) + 'px)', riverS: 'position:absolute;left:-10%;right:-10%;top:62%;height:' + Math.max(6, Math.round(ch * 0.08)) + 'px;background:#9CC6E4;transform:rotate(-8deg)', pinS: 'position:absolute;left:50%;top:45%;width:' + Math.round(fs * 1.1) + 'px;height:' + Math.round(fs * 1.1) + 'px;margin:-' + Math.round(fs * 0.55) + 'px 0 0 -' + Math.round(fs * 0.55) + 'px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#C8322B;box-shadow:0 0 0 3px #fff', mapL: 'Okolie zastávky · ' + (c.rad || '500 m'), mapLS: 'position:absolute;left:0;right:0;bottom:0;padding:' + Math.round(pad * 0.5) + 'px ' + pad + 'px;background:rgba(255,255,255,.85);color:#1A1F1F;font-weight:700;font-size:' + Math.round(fs * 0.65) + 'px',
+          isWeather: c.type === 'weather', wxS: 'position:absolute;inset:0;background:linear-gradient(160deg,#2F62B0,#1E2A5A);display:flex;flex-direction:column;justify-content:center;padding:' + pad + 'px;box-sizing:border-box;color:#fff', wxTS: 'font-size:' + Math.round(fs * 2) + 'px;font-weight:700;line-height:1', wxDS: 'font-size:' + Math.round(fs * 0.7) + 'px;font-weight:600;margin-top:' + Math.round(fs * 0.3) + 'px', wxFS: 'font-size:' + Math.round(fs * 0.6) + 'px;opacity:.85;margin-top:' + Math.round(fs * 0.4) + 'px;white-space:nowrap',
+          isLine: c.type === 'line', lnN: tl, lnDir: '→ ' + (c.dir || ''), lnS: 'position:absolute;inset:0;padding:' + pad + 'px;box-sizing:border-box;display:flex;flex-direction:column;gap:' + Math.round(tf * 0.45) + 'px;overflow:hidden;color:#fff', lnHS: 'display:flex;align-items:center;gap:' + Math.round(tf * 0.5) + 'px;font-weight:700;font-size:' + tf + 'px;white-space:nowrap;margin-bottom:' + Math.round(tf * 0.2) + 'px', lnBS: 'background:' + (LC[tl] || '#0E8080') + ';border-radius:4px;padding:0 ' + Math.round(tf * 0.35) + 'px', lnStops: LS.slice(0, nst).map((n, i) => ({ n, rS: 'display:flex;align-items:center;gap:' + Math.round(tf * 0.6) + 'px;font-size:' + Math.round(tf * 0.9) + 'px;font-weight:600;white-space:nowrap;overflow:hidden', dS: 'flex:none;width:' + Math.round(tf * 0.7) + 'px;height:' + Math.round(tf * 0.7) + 'px;border-radius:50%;border:2px solid ' + (LC[tl] || '#0E8080') + ';background:' + (i === 0 ? (LC[tl] || '#0E8080') : 'transparent') })),
+          isMenu: c.type === 'menu', mnS: 'position:absolute;inset:0;padding:' + Math.round(pad * 0.6) + 'px;box-sizing:border-box;display:grid;grid-template-columns:repeat(' + tcols + ',1fr);gap:' + Math.round(pad * 0.5) + 'px;background:#1A1F1F', tiles: tiles.map((n, i) => ({ n, s: 'display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px;color:#fff;font-weight:700;font-size:' + Math.round(fs * 0.7) + 'px;background:' + ['#0E8080', '#2F62B0', '#5B2A86', '#E07A2B'][i % 4] })),
+          isCal: c.type === 'cal', calH: MN[now2.getMonth()] + ' ' + now2.getFullYear(), calS: 'position:absolute;inset:0;padding:' + Math.round(pad * 0.7) + 'px;box-sizing:border-box;display:flex;flex-direction:column;gap:' + Math.round(cf * 0.4) + 'px;color:#fff', calHS: 'font-weight:700;font-size:' + Math.round(cf * 1.3) + 'px', calGS: 'display:grid;grid-template-columns:repeat(7,1fr);gap:' + Math.max(1, Math.round(cf * 0.2)) + 'px;font-size:' + cf + 'px;text-align:center', days: Array.from({ length: dim }, (_, i) => ({ n: String(i + 1), s: i + 1 === now2.getDate() ? 'background:#FFD27A;color:#1A1F1F;border-radius:3px;font-weight:700' : (i + 1) % 7 === 0 || (i + 1) % 7 === 6 ? 'color:#FFB4AE' : '' })),
+          isClock: c.type === 'clock', ckT: p2x(now2.getHours()) + ':' + p2x(now2.getMinutes()), ckD: now2.getDate() + '. ' + (now2.getMonth() + 1) + '. ' + now2.getFullYear(), ckS: 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff', ckTS: 'font-family:' + MONO + ';font-weight:700;font-size:' + Math.round(Math.min(fs * 2.4, cw / 3.4)) + 'px;line-height:1', ckDS: 'font-size:' + Math.round(fs * 0.7) + 'px;font-weight:600;margin-top:' + Math.round(fs * 0.3) + 'px'
+        };
+        return Object.assign(ext, {
+          isTt: c.type === 'tt', ttH: 'Linka ' + tl + ' → ' + (c.dir || ''), ttRows, ttS: 'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:' + Math.round(tf * 0.35) + 'px;padding:' + pad + 'px;box-sizing:border-box;overflow:hidden', ttHS: 'color:#fff;font-weight:700;font-size:' + Math.round(tf * 1.05) + 'px;margin-bottom:' + Math.round(tf * 0.3) + 'px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
+          isText: c.type === 'text', isPhoto: c.type === 'photo', isDeps: c.type === 'deps', text: c.text || '', cap: c.cap || '', hasCap: !!c.cap, rows,
+          boxS: 'position:absolute;left:' + c.x + '%;top:' + c.y + '%;width:' + c.w + '%;height:' + c.h + '%;box-sizing:border-box;overflow:hidden;background:' + (['photo', 'video', 'web', 'map', 'weather', 'menu'].indexOf(c.type) >= 0 ? '#1A1F1F' : (c.bg || '#1E2A5A')) + ';box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)',
+          txS: 'position:absolute;inset:0;display:flex;align-items:center;padding:0 ' + pad + 'px;box-sizing:border-box;color:#fff;font-weight:700;font-size:' + fs + 'px;line-height:1.15;overflow:hidden',
+          phS: 'position:absolute;inset:0;background:radial-gradient(circle at 72% 30%, rgba(255,255,255,.38), rgba(255,255,255,0) 38%), linear-gradient(135deg,' + (c.img || '#F2A65A') + ',#1A1F1F 160%)',
+          capS: 'position:absolute;left:0;right:0;bottom:0;padding:' + Math.round(pad * 0.6) + 'px ' + pad + 'px;background:rgba(0,0,0,.6);color:#fff;font-weight:700;font-size:' + Math.round(fs * 0.8) + 'px',
+          dpS: 'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:' + Math.round(rf * 0.4) + 'px;padding:' + pad + 'px;box-sizing:border-box'
+        });
+      });
+    }
+    return {
+      isTpl, tplSecs,
+      title: p.title || '', text: p.text || '', rows, ledTxt: lt, ledRows: tall ? tallRows : all.slice(0, 3).map((r) => ({ line: r.line, dest: r.dest.replace('Železničná stanica', 'Žel. stanica'), min: r.min.replace(' min', '′') })),
+      isInfo: !led && (kind === 'info' || kind === 'led'), isPhoto: !led && kind === 'photo', isDeps: !led && kind === 'deps', isLed: led, isLedDeps, isLedClock, isLedText: led && !isLedDeps && !isLedClock,
+      clkTime: p2(now.getHours()) + ':' + p2(now.getMinutes()) + (clkSec ? ':' + p2(now.getSeconds()) : ''), clkHasDate: fl.indexOf('n') < 0, clkDate: (fl.indexOf('w') >= 0 ? ['Ne', 'Po', 'Ut', 'St', 'Št', 'Pi', 'So'][now.getDay()] + ' ' : '') + now.getDate() + '. ' + (now.getMonth() + 1) + '.' + (fl.indexOf('y') >= 0 ? ' ' + now.getFullYear() : ''),
+      clkS: 'position:absolute;inset:0;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:' + MONO + ';font-weight:700;color:' + (col || amber) + ';text-shadow:' + glow(col || amber), clkTimeS: 'font-size:' + (clkSec ? 68 : 96) + 'px;line-height:1;letter-spacing:2px', clkDateS: 'font-size:34px;line-height:1;letter-spacing:1px',
+      wrapS: 'width:' + w + 'px;height:' + Math.round(H * k) + 'px;overflow:hidden;position:relative;border-radius:' + (parseFloat(p.r) || 0) + 'px;background:#000;flex:none',
+      innerS: 'width:' + W + 'px;height:' + H + 'px;transform:scale(' + k + ');transform-origin:0 0;position:relative;font-family:' + FONT + ';overflow:hidden',
+      infoS: 'position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;justify-content:center;gap:10px;padding:' + (port ? '24px' : '28px 36px') + ';box-sizing:border-box',
+      tS: 'color:#fff' + ';font-weight:700;font-size:' + (port ? 32 : 40) + 'px;line-height:1.1',
+      xS: 'color:rgba(255,255,255,.9)' + ';font-size:' + (port ? 18 : 22) + 'px;line-height:1.25',
+      photoS: 'position:absolute;inset:0;background:radial-gradient(circle at 72% 30%, rgba(255,255,255,.38), rgba(255,255,255,0) 38%), linear-gradient(135deg,' + (p.img || '#F2A65A') + ',#1A1F1F 160%)',
+      sunS: 'position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.25))',
+      capS: 'position:absolute;left:0;right:0;bottom:0;padding:14px 20px;background:rgba(0,0,0,.6);color:#fff;font-weight:700;font-size:' + (port ? 24 : 28) + 'px',
+      depsS: 'position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;gap:' + (port ? 12 : 8) + 'px;padding:' + (port ? '24px 20px' : '22px 30px') + ';box-sizing:border-box',
+      dhS: 'color:#fff;font-weight:700;font-size:' + (port ? 26 : 30) + 'px;margin-bottom:4px',
+      rowS: 'display:flex;align-items:center;gap:12px',
+      ledS: 'position:absolute;inset:0;background:#050505;display:flex;align-items:center;padding:8px 14px;box-sizing:border-box;overflow:hidden;text-align:' + al + ';justify-content:' + (one && !mq ? (al === 'center' ? 'center' : al === 'right' ? 'flex-end' : 'flex-start') : 'flex-start'),
+      ledTxS: 'font-family:' + MONO + ';font-weight:700;font-size:' + FS + 'px;line-height:1.15;letter-spacing:1px;color:' + txtCol + ';text-shadow:' + (fld ? 'none' : glow(col || amber)) + ';' + (fld ? 'background:' + fld + ';padding:2px 8px;box-sizing:border-box;' : '') + (one ? 'display:inline-block;white-space:nowrap;' + (mq ? 'padding-left:100%;animation:wzmarq ' + Math.max(6, Math.round(lt.length * FS * 0.62 / 55)) + 's linear infinite;' : '') : 'display:block;width:100%;overflow:hidden;max-height:' + (H - 16) + 'px;'),
+      ledDepsS: 'position:absolute;inset:0;background:#050505;display:flex;flex-direction:column;justify-content:center;gap:' + (tall ? 3 : 4) + 'px;padding:6px ' + (tall ? 8 : 12) + 'px;box-sizing:border-box;font-family:' + MONO + ';font-weight:700;font-size:' + (tall ? 25 : 26) + 'px;line-height:1.1;letter-spacing:' + (tall ? 0 : 1) + 'px',
+      ledRowS: 'display:flex;align-items:center;gap:' + (tall ? 8 : 12) + 'px;height:' + (tall ? 43 : 36) + 'px',
+      ledNumS: 'min-width:' + (tall ? 44 : 52) + 'px;height:' + (tall ? 36 : 32) + 'px;display:flex;align-items:center;justify-content:center;padding:0 4px;box-sizing:border-box;background:' + (fld || amber) + ';color:#050505',
+      ledDestS: 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;color:' + (col || amber) + ';text-shadow:' + glow(col || amber),
+      ledMinS: 'white-space:nowrap;color:' + (col || amber) + ';text-shadow:' + glow(col || amber),
+      dotS: 'position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle, rgba(5,5,5,0) 1.25px, #050505 1.75px) 0 0/4px 4px'
+    };
+  }
+}
+</script>
+</body>
+</html>

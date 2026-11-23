@@ -1,0 +1,503 @@
+
+    <!-- ===== MIESTA ===== -->
+    <sc-if value="{{ s_plc }}" hint-placeholder-val="{{ false }}">
+      <div class="filters">
+        <label class="srch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B6566" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.search }}"></path></svg><input value="{{ pq }}" onInput="{{ setPq }}" placeholder="Hľadať miesto" aria-label="Hľadať miesto"></label>
+        <div class="chips"><sc-for list="{{ pcChips }}" as="c" hint-placeholder-count="4"><button class="chip" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}<span class="cn">{{ c.n }}</span></button></sc-for></div>
+      </div>
+      <div class="sc" style="padding-top: 12px">
+        <sc-for list="{{ pcGroups }}" as="g" hint-placeholder-count="2">
+          <div class="pcg">
+            <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ true }}"><button class="pcgh" aria-expanded="{{ g.openA }}" onClick="{{ g.toggle }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ g.chev }}"></path></svg><span class="pcgn" translate="{{ g.nameTr }}">{{ g.name }}</span><span class="pcgc">{{ g.n }}</span><sc-if value="{{ g.hasProb }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="bad">{{ g.probT }}</span></sc-if></button></sc-if>
+            <div class="list sep"><sc-for list="{{ g.rows }}" as="p" hint-placeholder-count="3">
+              <div class="row wrap" style="align-items: flex-start">
+                <button class="rowmain" style="align-items: flex-start" onClick="{{ p.open }}">
+                  <span class="dot" data-k="{{ p.dotK }}" style="margin-top: 7px"></span>
+                  <span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ p.name }}</span><span class="sm" style="display: block; font-weight: 600; color: var(--tx2)">{{ p.devT }}</span><span class="mut sm" style="display: block"><span translate="no">{{ p.plNm }}</span>{{ p.plT }}</span><sc-if value="{{ p.hasDev }}" hint-placeholder-val="{{ true }}"><span style="display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; align-items: center"><span class="pill" data-k="{{ p.stK }}">{{ p.stT }}</span><sc-if value="{{ p.offline }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="bad">Offline</span></sc-if><sc-if value="{{ p.temp }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="blue">Dočasne · {{ p.until }}</span></sc-if></span></sc-if></span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 4px"><path d="{{ ic.next }}"></path></svg>
+                </button>
+                <sc-if value="{{ p.hasDev }}" hint-placeholder-val="{{ true }}"><span class="acts">
+                  <sc-if value="{{ p.canEdit }}" hint-placeholder-val="{{ true }}"><button class="btn sm" data-k="{{ p.editK }}" aria-label="{{ p.editA }}" onClick="{{ p.edit }}">{{ p.editT }}</button></sc-if>
+                  <sc-if value="{{ p.canSw }}" hint-placeholder-val="{{ true }}"><button class="btn sm" aria-label="{{ p.changeA }}" onClick="{{ p.change }}">Prepnúť playlist</button></sc-if>
+                  <sc-if value="{{ p.temp }}" hint-placeholder-val="{{ false }}"><button class="btn sm" style="flex: 1 1 100%" onClick="{{ p.revert }}">Vrátiť pôvodný</button></sc-if>
+                </span></sc-if>
+              </div>
+            </sc-for></div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ pcEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">Nič sa nenašlo.</div></sc-if>
+        <div class="mut sm" style="text-align: center">{{ pcFootT }}</div>
+      </div>
+    </sc-if>
+
+    <!-- ===== DETAIL MIESTA (Miesta › ťuknutie na miesto) ===== -->
+    <sc-if value="{{ s_pd }}" hint-placeholder-val="{{ false }}">
+      <div class="sc">
+        <sc-if value="{{ pd.noDev }}" hint-placeholder-val="{{ false }}"><div class="note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.info }}"></path></svg><span>Miesto zatiaľ nemá zariadenie. Zariadenie sa priraďuje v desktopovej aplikácii.</span></div></sc-if>
+        <sc-if value="{{ pd.hasDev }}" hint-placeholder-val="{{ true }}">
+          <div class="kv">
+            <div class="card kvc"><div class="mut sm">Stav zariadenia</div><div class="nm" style="display: flex; align-items: center; gap: 8px"><span class="dot" data-k="{{ pd.dotK }}"></span><span>{{ pd.stT }}</span></div><div class="mut sm">{{ pd.seenT }}</div></div>
+            <div class="card kvc"><div class="mut sm">Skupina</div><div class="nm" translate="{{ pd.grpTr }}">{{ pd.grpT }}</div><div class="mut sm">{{ pd.devN }}</div></div>
+            <div class="card kvc" style="grid-column: 1 / -1"><div class="mut sm">Zariadenie</div><div class="nm">{{ pd.devT }}</div></div>
+          </div>
+          <sc-if value="{{ pd.isOff }}" hint-placeholder-val="{{ false }}"><div class="note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.warn }}"></path></svg><span>Zariadenie je offline. Zobrazuje naposledy nahratý obsah, zmeny sa doručia po pripojení.</span></div></sc-if>
+          <div class="sec"><h2 class="h2">Teraz sa prehráva</h2>
+            <sc-if value="{{ pd.hasPl }}" hint-placeholder-val="{{ true }}">
+              <div class="card form">
+                <div style="display: flex; gap: 12px; align-items: flex-start"><span style="{{ pd.thS }}"></span><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ pd.plName }}</span><span class="mut sm" style="display: block">{{ pd.planT }}</span><span style="display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; align-items: center"><sc-if value="{{ pd.hasSt }}" hint-placeholder-val="{{ true }}"><span class="pill" data-k="{{ pd.stK }}">{{ pd.plStT }}</span></sc-if><sc-if value="{{ pd.temp }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="blue">Dočasne · {{ pd.until }}</span></sc-if></span></span></div>
+                <div class="acts" style="flex: none">
+                  <sc-if value="{{ pd.canEdit }}" hint-placeholder-val="{{ true }}"><button class="btn sm" data-k="{{ pd.editK }}" aria-label="{{ pd.editA }}" onClick="{{ pd.edit }}">{{ pd.editT }}</button></sc-if>
+                  <sc-if value="{{ pd.canSw }}" hint-placeholder-val="{{ true }}"><button class="btn sm" aria-label="{{ pd.changeA }}" onClick="{{ pd.change }}">Prepnúť playlist</button></sc-if>
+                  <button class="btn sm" aria-label="{{ pd.prevA }}" onClick="{{ pd.prev }}">Náhľad</button>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pd.noPl }}" hint-placeholder-val="{{ false }}"><div class="card form"><div><div class="nm">Bez playlistu</div><div class="mut sm">Na mieste sa teraz nič neprehráva.</div></div><sc-if value="{{ pd.canSw }}" hint-placeholder-val="{{ true }}"><button class="btn sm" data-k="p2" aria-label="{{ pd.changeA }}" onClick="{{ pd.change }}">Prepnúť playlist</button></sc-if></div></sc-if>
+          </div>
+          <sc-if value="{{ pd.hasPl }}" hint-placeholder-val="{{ true }}">
+            <div class="sec"><h2 class="h2">Čo príde potom</h2>
+              <div class="card form"><div><div>{{ pd.nextT }}</div><sc-if value="{{ pd.hasNextName }}" hint-placeholder-val="{{ false }}"><div class="nm" style="margin-top: 4px" translate="no">{{ pd.nextName }}</div></sc-if></div><sc-if value="{{ pd.temp }}" hint-placeholder-val="{{ false }}"><button class="btn sm" style="align-self: flex-start" onClick="{{ pd.revert }}">Vrátiť pôvodný playlist</button></sc-if></div>
+            </div>
+          </sc-if>
+          <div class="sec"><h2 class="h2">Rýchle správy na tomto mieste</h2>
+            <sc-if value="{{ pd.hasMsgs }}" hint-placeholder-val="{{ true }}"><div class="list"><sc-for list="{{ pd.msgs }}" as="m" hint-placeholder-count="1">
+              <div class="row wrap" style="align-items: flex-start">
+                <span style="display: flex; flex-direction: column; gap: 4px; flex: none"><sc-if value="{{ m.plan }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="blue">Naplánovaná</span></sc-if><span class="pill" data-k="{{ m.k }}">{{ m.prioT }}</span></span>
+                <span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ m.text }}</span><span class="mut sm" style="display: block">{{ m.meta }}</span><sc-if value="{{ m.hasDl }}" hint-placeholder-val="{{ true }}"><button class="lnk dll" aria-label="{{ m.dlA }}" onClick="{{ m.dlOpen }}"><span>{{ m.dlT }}</span><sc-if value="{{ m.dlHasWait }}" hint-placeholder-val="{{ false }}"><span class="wt">{{ m.dlWaitT }}</span></sc-if><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.next }}"></path></svg></button></sc-if></span>
+                <sc-if value="{{ m.hasActs }}" hint-placeholder-val="{{ true }}"><span class="acts"><sc-if value="{{ m.canEdit }}" hint-placeholder-val="{{ true }}"><button class="btn sm" aria-label="{{ m.editA }}" onClick="{{ m.edit }}">Upraviť</button></sc-if><sc-if value="{{ m.canCancel }}" hint-placeholder-val="{{ true }}"><button class="btn sm" data-k="d" aria-label="{{ m.cancelA }}" onClick="{{ m.cancel }}">Zrušiť</button></sc-if></span></sc-if>
+              </div>
+            </sc-for></div></sc-if>
+            <sc-if value="{{ pd.noMsgs }}" hint-placeholder-val="{{ false }}"><div class="card mut">Na tomto mieste teraz nie je žiadna rýchla správa.</div></sc-if>
+            <sc-if value="{{ pd.canQuick }}" hint-placeholder-val="{{ true }}"><button class="btn" data-k="p2" onClick="{{ pd.quick }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.msg }}"></path></svg>Poslať správu na toto miesto</button></sc-if>
+          </div>
+          <sc-if value="{{ pd.hasDl }}" hint-placeholder-val="{{ true }}">
+            <div class="sec"><h2 class="h2">Posledné doručenia</h2>
+              <div class="list"><sc-for list="{{ pd.dl }}" as="d" hint-placeholder-count="1">
+                <button class="row" style="align-items: flex-start" onClick="{{ d.open }}" aria-label="{{ d.openA }}"><span style="flex: 1; min-width: 0"><span class="mut sm" style="display: block">{{ d.kindT }} · {{ d.tT }}</span><span class="nm" translate="no">{{ d.name }}</span></span><span class="pill" data-k="{{ d.k }}">{{ d.t }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.next }}"></path></svg></button>
+              </sc-for></div>
+            </div>
+          </sc-if>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- ===== GALÉRIA ===== -->
+    <sc-if value="{{ s_gal }}" hint-placeholder-val="{{ false }}">
+      <div class="filters">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--mut)"><span style="flex: 1; height: 8px; border-radius: 4px; background: var(--trk); overflow: hidden"><span style="display: block; width: 6%; height: 100%; background: #0E8080"></span></span><span style="font-weight: 600">57 MB z 1 GB</span></div>
+        <div class="chips"><sc-for list="{{ galChips }}" as="c" hint-placeholder-count="5"><button class="chip" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}<span class="cn">{{ c.n }}</span></button></sc-for></div>
+      </div>
+      <div class="sc" style="padding-top: 12px; padding-bottom: 88px">
+        <div class="grid"><sc-for list="{{ galRows }}" as="g" hint-placeholder-count="6">
+          <button class="gt" onClick="{{ g.open }}" aria-label="{{ g.aria }}">
+            <span style="{{ g.thS }}"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ g.d }}"></path></svg><sc-if value="{{ g.hasDur }}" hint-placeholder-val="{{ false }}"><span class="gdur">{{ g.dur }}</span></sc-if></span>
+            <span class="nm" style="font-size: 14px" translate="no">{{ g.name }}</span>
+            <span style="display: flex; align-items: center; gap: 6px"><span class="mut sm">{{ g.size }}</span><sc-if value="{{ g.unused }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="grey">Nepoužité</span></sc-if></span>
+          </button>
+        </sc-for></div>
+        <sc-if value="{{ galEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">V tomto filtri nie je žiadny súbor.</div></sc-if>
+      </div>
+      <button class="fab" onClick="{{ openUpload }}" aria-label="Nahrať súbor"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.upload }}"></path></svg></button>
+    </sc-if>
+
+    <!-- ===== VIAC ===== -->
+    <sc-if value="{{ s_more }}" hint-placeholder-val="{{ false }}">
+      <div class="sc">
+        <div class="card" style="display: flex; align-items: center; gap: 14px"><span class="avatar" aria-hidden="true">{{ meIni }}</span><span style="flex: 1; min-width: 0"><span class="nm" style="font-size: 17px" translate="no">{{ meName }}</span><span class="mut sm" style="display: block">{{ meRole }}</span></span></div>
+        <div class="list"><sc-for list="{{ moreRows }}" as="m" hint-placeholder-count="2">
+          <button class="row" onClick="{{ m.open }}"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ m.d }}"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm">{{ m.title }}</span><span class="mut sm" style="display: block">{{ m.sub }}</span></span><sc-if value="{{ m.hasBadge }}" hint-placeholder-val="{{ false }}"><span class="cnt">{{ m.badge }}</span></sc-if><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.next }}"></path></svg></button>
+        </sc-for></div>
+        <button class="btn" onClick="{{ logout }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.logout }}"></path></svg>Odhlásiť sa</button>
+      </div>
+    </sc-if>
+
+    <!-- ===== SCHVAĽOVANIE ===== -->
+    <sc-if value="{{ s_apv }}" hint-placeholder-val="{{ false }}">
+      <div class="filters"><div class="seg"><sc-for list="{{ apvTabs }}" as="t" hint-placeholder-count="2"><button aria-pressed="{{ t.on }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for></div></div>
+      <div class="sc" style="padding-top: 12px">
+        <sc-for list="{{ apvRows }}" as="a" hint-placeholder-count="3">
+          <button class="card tap apc" onClick="{{ a.open }}">
+            <span style="display: flex; align-items: flex-start; gap: 10px; width: 100%"><span style="flex: 1; min-width: 0; text-align: left"><span class="nm" translate="no">{{ a.name }}</span><span class="mut sm" style="display: block">{{ a.by }}</span></span><span class="pill" data-k="{{ a.k }}">{{ a.stT }}</span></span>
+            <span style="display: flex; gap: 14px; font-size: 13px; color: var(--tx2); margin-top: 8px; text-align: left; flex-wrap: wrap"><span>{{ a.devT }}</span><span>{{ a.nChg }}</span><span>{{ a.nPl }}</span></span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ apvEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">{{ apvEmptyT }}</div></sc-if>
+      </div>
+    </sc-if>
+
+    <!-- ===== DETAIL SCHVÁLENIA ===== -->
+    <sc-if value="{{ s_ad }}" hint-placeholder-val="{{ false }}">
+      <div class="sc">
+        <div class="card" style="display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; align-items: flex-start; gap: 10px"><div style="flex: 1; min-width: 0"><div class="nm" style="font-size: 17px" translate="no">{{ ad.name }}</div><div class="mut sm">{{ ad.by }}</div><div class="sm" style="font-weight: 600; color: var(--tx2)">{{ ad.devT }}</div></div><span class="pill" data-k="{{ ad.k }}">{{ ad.stT }}</span></div>
+          <div class="h2">Náhľad snímok</div>
+          <div class="strip" tabindex="0" role="region" aria-label="Snímky playlistu"><sc-for list="{{ adSlides }}" as="r" hint-placeholder-count="3"><div style="{{ r.itemS }}"><dc-import name="Slide" sx="{{ r.sx }}" kind="{{ r.kind }}" title="{{ r.title }}" text="{{ r.text }}" bg="{{ r.bg }}" img="{{ r.img }}" dev="{{ r.dev }}" w="{{ r.w }}" r="8" ledsize="{{ r.ledSize }}" ledalign="{{ r.ledAlign }}" ledcol="{{ r.ledCol }}" ledbg="{{ r.ledBg }}" hint-size="150px,84px"></dc-import><div class="mut sm" style="margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" translate="no">{{ r.title }}</div></div></sc-for></div>
+        </div>
+        <div class="card">
+          <div class="h2" style="margin-bottom: 8px">Zmeny v playliste</div>
+          <sc-for list="{{ adChanges }}" as="c" hint-placeholder-count="3"><div class="chg"><span class="chgi" data-k="{{ c.k }}" aria-hidden="true">{{ c.sym }}</span><span style="flex: 1; min-width: 0; line-height: 1.3">{{ c.text }}</span></div></sc-for>
+        </div>
+        <div class="card">
+          <div class="h2" style="margin-bottom: 6px">Kde sa nahrá</div>
+          <div style="line-height: 1.35">{{ ad.whereT }}</div>
+          <div class="mut sm" style="margin-top: 4px">{{ ad.valid }}</div>
+        </div>
+        <sc-if value="{{ adCanAct }}" hint-placeholder-val="{{ true }}">
+          <div class="card form"><label class="lbl" for="ad-note">Komentár pre autora</label><textarea id="ad-note" class="inp" rows="2" value="{{ apvNote }}" onInput="{{ setApvNote }}" placeholder="Napr. Vyzerá dobre, schvaľujem." aria-invalid="{{ apvErr }}"></textarea><sc-if value="{{ apvErr }}" hint-placeholder-val="{{ false }}"><div class="err" role="alert">Napíšte autorovi, čo má upraviť alebo prečo zmenu zamietate.</div></sc-if><div class="mut sm">Pri vrátení na úpravu a zamietnutí je komentár povinný.</div></div>
+        </sc-if>
+        <sc-if value="{{ adDone }}" hint-placeholder-val="{{ false }}">
+          <div class="card"><div class="h2" style="margin-bottom: 6px">Výsledok</div><div style="line-height: 1.35">{{ ad.doneT }}</div><sc-if value="{{ ad.hasNote }}" hint-placeholder-val="{{ false }}"><div class="mut" style="margin-top: 6px" translate="no">„{{ ad.note }}“</div></sc-if></div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ adCanAct }}" hint-placeholder-val="{{ true }}">
+        <div class="bar" style="flex-direction: column; gap: 8px">
+          <button class="btn" data-k="p" style="width: 100%" onClick="{{ apvApprove }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>Schváliť a zverejniť</button>
+          <div style="display: flex; gap: 8px; width: 100%"><button class="btn" style="flex: 1" onClick="{{ apvReturn }}">Vrátiť na úpravu</button><button class="btn" data-k="d" style="flex: 1" onClick="{{ apvReject }}">Zamietnuť</button></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ adOwn }}" hint-placeholder-val="{{ false }}">
+        <div class="bar"><button class="btn" style="flex: 1" onClick="{{ apvWithdraw }}">Vziať späť</button></div>
+      </sc-if>
+    </sc-if>
+
+    <!-- ===== NASTAVENIA ===== -->
+    <!-- ===== HISTÓRIA SPRÁV (Viac › História správ) ===== -->
+    <sc-if value="{{ s_hist }}" hint-placeholder-val="{{ false }}">
+      <div class="sc">
+        <div class="mut sm">Rýchle správy, ktoré už skončili alebo boli zrušené. Ťuknutím na správu zobrazíte detail – komu išla, kto a kedy ju odoslal. Správu môžete poslať znova – pred odoslaním ju ešte upravíte.</div>
+        <sc-if value="{{ qhHas }}" hint-placeholder-val="{{ true }}">
+          <div class="list"><sc-for list="{{ qh }}" as="h" hint-placeholder-count="4">
+            <div class="row">
+              <button class="rowmain" onClick="{{ h.open }}" aria-label="{{ h.openA }}"><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ h.text }}</span><span class="mut sm" style="display: block">{{ h.meta }}</span></span></button>
+              <button class="btn sm" aria-label="{{ h.againA }}" onClick="{{ h.again }}">Poslať znova</button>
+            </div>
+          </sc-for></div>
+        </sc-if>
+        <sc-if value="{{ qhEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">V histórii zatiaľ nie je žiadna rýchla správa.</div></sc-if>
+      </div>
+    </sc-if>
+
+    <!-- ===== ZÁZNAM AKTIVÍT (Viac › Záznam aktivít; len Admin a Director) ===== -->
+    <sc-if value="{{ s_act }}" hint-placeholder-val="{{ false }}">
+      <div class="filters">
+        <div class="chips"><sc-for list="{{ actChips }}" as="c" hint-placeholder-count="4"><button class="chip" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}<span class="cn">{{ c.n }}</span></button></sc-for></div>
+      </div>
+      <div class="sc" style="padding-top: 12px" tabindex="0" role="region" aria-label="Záznam aktivít">
+        <div class="mut sm">Kto čo zverejnil, prepol, odoslal alebo schválil. Záznam vidí len Admin a Director.</div>
+        <div class="list"><sc-for list="{{ actRows }}" as="a" hint-placeholder-count="5">
+          <div class="row" style="align-items: flex-start"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ a.d }}"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm">{{ a.t }}</span><span class="sm" style="display: block" translate="no">{{ a.name }}</span><span class="mut sm" style="display: block"><span translate="no">{{ a.by }} · {{ a.role }}</span> · <span>{{ a.meta }}</span></span></span></div>
+        </sc-for></div>
+        <sc-if value="{{ actEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">V tomto filtri nie je žiadny záznam.</div></sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ s_set }}" hint-placeholder-val="{{ false }}">
+      <div class="sc">
+        <div class="h2">Vzhľad</div>
+        <div class="seg" role="group" aria-label="Vzhľad"><sc-for list="{{ themeOpts }}" as="t" hint-placeholder-count="3"><button aria-pressed="{{ t.on }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for></div>
+        <sc-if value="{{ fdSet }}" hint-placeholder-val="{{ false }}"><div class="note" role="note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.info }}"></path></svg><span>Samsung Internet prefarbuje stránky vlastným tmavým režimom, preto sa zvolený vzhľad nemusí prejaviť. Vypnite ho v prehliadači: ⋮ › Nastavenia › Zobrazenie webových stránok a posúvanie › Tmavý režim › vynútený tmavý režim pre webový obsah. V starších verziách zapnite ⋮ › Nastavenia › Užitočné funkcie › Labs › Tmavý režim webovej stránky.</span></div></sc-if>
+        <div class="h2">Upozornenia v telefóne</div>
+        <div class="list"><sc-for list="{{ notifRows }}" as="x" hint-placeholder-count="5">
+          <div class="row"><span style="flex: 1; min-width: 0"><span class="nm">{{ x.title }}</span><span class="mut sm" style="display: block">{{ x.sub }}</span></span><button class="sw" role="switch" aria-checked="{{ x.on }}" aria-label="{{ x.title }}" onClick="{{ x.toggle }}"></button></div>
+        </sc-for></div>
+        <div class="h2">AI asistent</div>
+        <div class="list"><sc-for list="{{ aiRows }}" as="x" hint-placeholder-count="2">
+          <div class="row"><span style="flex: 1; min-width: 0"><span class="nm">{{ x.title }}</span><span class="mut sm" style="display: block">{{ x.sub }}</span></span><button class="sw" role="switch" aria-checked="{{ x.on }}" aria-label="{{ x.title }}" onClick="{{ x.toggle }}"></button></div>
+        </sc-for></div>
+        <div class="mut sm">Chat s asistentom otvoríte v záložke AI asistent dole.</div>
+        <div class="h2">Zdroje dát</div>
+        <div class="list"><sc-for list="{{ srcRows }}" as="x" hint-placeholder-count="4"><div class="row" style="min-height: 52px"><span class="nm" style="flex: 1; font-size: 15px">{{ x.name }}</span><span class="pill" data-k="{{ x.stK }}">{{ x.stT }}</span></div></sc-for></div>
+        <div class="mut sm">Podľa zdrojov dát sa ponúka obsah sekcií snímky. Pripájajú sa v desktopovej aplikácii.</div>
+        <div class="h2">Prototyp</div>
+        <div class="list"><sc-for list="{{ protoRows }}" as="x" hint-placeholder-count="1">
+          <div class="row"><span style="flex: 1; min-width: 0"><span class="nm">{{ x.title }}</span><span class="mut sm" style="display: block">{{ x.sub }}</span></span><button class="sw" role="switch" aria-checked="{{ x.on }}" aria-label="{{ x.title }}" onClick="{{ x.toggle }}"></button></div>
+        </sc-for></div>
+        <div class="h2">Úložisko</div>
+        <div class="card" style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between"><span class="nm">Cloudové úložisko</span><span class="mut">57 MB z 1 GB</span></div><div style="height: 8px; border-radius: 4px; background: var(--trk); overflow: hidden"><div style="width: 6%; height: 100%; background: #0E8080"></div></div></div>
+      </div>
+    </sc-if>
+
+    <!-- ===== AI ASISTENT: chat (záložka dole) ===== -->
+    <sc-if value="{{ s_ai }}" hint-placeholder-val="{{ false }}">
+      <div class="sc chat" id="ai-chat" aria-live="polite">
+        <div class="msg" data-who="ai"><div style="font-weight: 700">{{ aiHi }}</div><div>{{ aiIntro }}</div><div class="mut sm">Prototyp: AI odpovedá z ukážkových údajov aplikácie.</div></div>
+        <sc-for list="{{ aiMsgs }}" as="m" hint-placeholder-count="2">
+          <div class="msg" data-who="{{ m.who }}">
+            <sc-if value="{{ m.meChip }}" hint-placeholder-val="{{ false }}"><div>{{ m.text }}</div></sc-if>
+            <sc-if value="{{ m.meTyped }}" hint-placeholder-val="{{ false }}"><div translate="no">{{ m.text }}</div></sc-if>
+            <sc-if value="{{ m.ai }}" hint-placeholder-val="{{ true }}">
+              <div>{{ m.text }}</div>
+              <sc-if value="{{ m.hasItems }}" hint-placeholder-val="{{ false }}"><div class="ai-list"><sc-for list="{{ m.items }}" as="it" hint-placeholder-count="2">
+                <sc-if value="{{ it.canTap }}" hint-placeholder-val="{{ true }}"><button class="ai-it" onClick="{{ it.tap }}" aria-label="{{ it.aria }}"><span class="nm" translate="no">{{ it.name }}</span><span class="mut sm"><span translate="no">{{ it.subD }}</span>{{ it.sub }}</span></button></sc-if>
+                <sc-if value="{{ it.noTap }}" hint-placeholder-val="{{ false }}"><div class="ai-it"><span class="nm" translate="no">{{ it.name }}</span><span class="mut sm"><span translate="no">{{ it.subD }}</span>{{ it.sub }}</span></div></sc-if>
+              </sc-for></div></sc-if>
+              <sc-if value="{{ m.hasSugg }}" hint-placeholder-val="{{ false }}"><sc-for list="{{ m.sugg }}" as="g" hint-placeholder-count="3"><div class="ai-sg"><span>{{ g.text }}</span><button class="btn sm" aria-label="{{ g.useA }}" onClick="{{ g.use }}">Použiť</button></div></sc-for></sc-if>
+              <sc-if value="{{ m.hasNote }}" hint-placeholder-val="{{ false }}"><div class="mut sm">{{ m.note }}</div></sc-if>
+              <sc-if value="{{ m.hasActs }}" hint-placeholder-val="{{ false }}"><div class="ai-acts"><sc-for list="{{ m.acts }}" as="a" hint-placeholder-count="1"><button class="btn sm" onClick="{{ a.fn }}">{{ a.label }}</button></sc-for></div></sc-if>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ aiTyping }}" hint-placeholder-val="{{ false }}"><div class="msg" data-who="ai" role="status"><span class="mut">AI píše…</span></div></sc-if>
+      </div>
+      <div class="aiq">
+        <div class="chips"><sc-for list="{{ aiChips }}" as="c" hint-placeholder-count="4"><button class="chip" onClick="{{ c.ask }}">{{ c.label }}</button></sc-for></div>
+        <div class="aiq-r"><input class="inp" value="{{ aiQ }}" onInput="{{ setAiQ }}" onKeyDown="{{ aiKey }}" placeholder="Napíšte otázku alebo požiadavku" aria-label="Otázka pre AI asistenta" enterkeyhint="send"><button class="aiq-send" onClick="{{ aiSend }}" disabled="{{ aiNoQ }}" aria-label="Odoslať otázku"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.send }}"></path></svg></button></div>
+      </div>
+    </sc-if>
+
+    <!-- ===== NÁHĽAD ===== -->
+    <sc-if value="{{ s_pv }}" hint-placeholder-val="{{ false }}">
+      <div class="pvb">
+        <div style="padding: 0 16px; font-size: 14px; color: #C9D2D2; text-align: center">{{ pvDevT }}</div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0"><sc-if value="{{ pvHas }}" hint-placeholder-val="{{ true }}"><div style="{{ pvWrapS }}"><sc-for list="{{ pvParts }}" as="q" hint-placeholder-count="1"><dc-import name="Slide" sx="{{ q.sx }}" kind="{{ q.kind }}" title="{{ q.title }}" text="{{ q.text }}" bg="{{ q.bg }}" img="{{ q.img }}" dev="{{ q.dev }}" w="{{ q.w }}" r="{{ q.r }}" ledsize="{{ q.ledSize }}" ledalign="{{ q.ledAlign }}" ledcol="{{ q.ledCol }}" ledbg="{{ q.ledBg }}" hint-size="358px,201px"></dc-import></sc-for></div></sc-if><sc-if value="{{ pvNone }}" hint-placeholder-val="{{ false }}"><div style="color: #C9D2D2; padding: 24px; text-align: center">Playlist nemá žiadne snímky.</div></sc-if></div>
+        <div style="padding: 0 20px"><div style="display: flex; gap: 4px"><sc-for list="{{ pvSegs }}" as="g" hint-placeholder-count="3"><span style="{{ g.s }}"><span style="{{ g.f }}"></span></span></sc-for></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 14px; color: #C9D2D2"><span style="font-weight: 700; color: #fff; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ pvCap }}<span translate="no">{{ pvCapD }}</span></span><span style="flex: none">{{ pvTime }}</span></div></div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 22px; padding: 4px 0 14px">
+          <button class="ctl" onClick="{{ pvPrev }}" aria-label="Predchádzajúca snímka"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"></path></svg></button>
+          <button class="ctl big" onClick="{{ pvToggle }}" aria-label="{{ pvPlayLbl }}"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="{{ pvPlayD }}"></path></svg></button>
+          <button class="ctl" onClick="{{ pvNext }}" aria-label="Nasledujúca snímka"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 5h-2.5v14H18zM4 5v14l10.5-7z"></path></svg></button>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <nav class="tabs" aria-label="Hlavná navigácia"><sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+    <button class="tab" aria-current="{{ t.cur }}" onClick="{{ t.pick }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ t.d }}"></path></svg><span>{{ t.label }}</span><sc-if value="{{ t.hasBadge }}" hint-placeholder-val="{{ false }}"><span class="badge">{{ t.badge }}</span></sc-if></button>
+  </sc-for></nav>
+
+  <!-- ===== RÝCHLA SPRÁVA ===== -->
+  <sc-if value="{{ sh_quick }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 94%" role="dialog" aria-label="{{ qTitle }}">
+      <div class="grab"></div>
+      <sc-if value="{{ qMain }}" hint-placeholder-val="{{ true }}">
+        <div class="sheet-h"><div class="shh">{{ qTitle }}</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+        <div class="sheet-b">
+          <sc-if value="{{ qIsEdit }}" hint-placeholder-val="{{ false }}"><div class="note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.info }}"></path></svg><span>{{ qEditNote }}</span></div></sc-if>
+          <div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; min-height: 44px; margin: -6px 0 -4px"><label class="lbl" for="q-text" style="flex: 1">Text správy</label><sc-if value="{{ qHasText }}" hint-placeholder-val="{{ true }}"><button class="lnk clr" onClick="{{ qClear }}" aria-label="Zmazať text správy"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg>Zmazať text</button></sc-if></div><textarea id="q-text" class="inp" rows="3" value="{{ qText }}" onInput="{{ setQText }}" placeholder="Napíšte text alebo vyberte šablónu"></textarea>
+            <div class="chips" style="flex-wrap: wrap" aria-label="Šablóny"><sc-for list="{{ qTpls }}" as="c" hint-placeholder-count="5"><button class="chip" aria-pressed="{{ c.on }}" translate="{{ c.tr }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for><sc-if value="{{ qTplMore }}" hint-placeholder-val="{{ true }}"><button class="chip more" aria-expanded="{{ qTplAllA }}" onClick="{{ qTplToggle }}">{{ qTplMoreT }}</button></sc-if></div>
+            <sc-if value="{{ qHasPar }}" hint-placeholder-val="{{ false }}">
+              <div class="card form qpar">
+                <sc-if value="{{ qHasL }}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 6px"><div class="lbl">Linka</div><div class="chips lnc" style="flex-wrap: wrap" role="group" aria-label="Linka"><sc-for list="{{ qTL }}" as="l" hint-placeholder-count="6"><button class="chip" aria-pressed="{{ l.on }}" aria-label="{{ l.aria }}" translate="no" onClick="{{ l.pick }}">{{ l.label }}</button></sc-for></div></div></sc-if>
+                <sc-if value="{{ qHasM }}" hint-placeholder-val="{{ true }}"><div style="display: flex; align-items: center; gap: 12px"><div class="lbl" style="flex: 1">Meškanie</div><div class="step" style="align-self: auto"><button class="ib" aria-label="Skrátiť o 5 minút" onClick="{{ qTMMinus }}" disabled="{{ qTMMinOff }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button><span class="stv" translate="no">{{ qTMT }}</span><button class="ib" aria-label="Predĺžiť o 5 minút" onClick="{{ qTMPlus }}" disabled="{{ qTMMaxOff }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.plus }}"></path></svg></button></div></div></sc-if>
+                <div class="mut sm">Hodnoty meníte ťuknutím, text správy sa doplní sám.</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ qTplActs }}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center"><sc-if value="{{ qCanSaveTpl }}" hint-placeholder-val="{{ false }}"><button class="btn sm" onClick="{{ qSaveTpl }}">Uložiť ako šablónu</button></sc-if><sc-if value="{{ qTplMine }}" hint-placeholder-val="{{ false }}"><button class="btn sm" data-k="{{ qDelTplK }}" onClick="{{ qDelTpl }}">{{ qDelTplT }}</button></sc-if></div></sc-if></div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><div class="lbl">Kam sa pošle</div>
+            <button class="pickrow" onClick="{{ qOpenPlaces }}"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.pin }}"></path></svg></span><span style="flex: 1; min-width: 0; text-align: left"><span class="nm">{{ qTgtT }}</span><span class="mut sm" style="display: block">{{ qTgtSub }}</span></span><span class="lnk" style="display: flex; align-items: center">Vybrať</span></button></div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><div class="lbl">Priorita</div><div class="seg"><sc-for list="{{ qPrios }}" as="c" hint-placeholder-count="2"><button aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><div class="lbl">Kde na obrazovke</div><div class="seg"><sc-for list="{{ qPoss }}" as="c" hint-placeholder-count="3"><button aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for></div></div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><div class="lbl">Náhľad na zariadení</div>
+            <div class="qpv">
+              <sc-if value="{{ qPvL }}" hint-placeholder-val="{{ true }}"><div class="qpvi"><div class="qscr" data-o="l"><div class="qband" data-k="{{ qPvK }}" data-pos="{{ qPvPos }}"><span translate="no">{{ qPvText }}</span></div></div><span class="mut sm">{{ qPvLT }}</span></div></sc-if>
+              <sc-if value="{{ qPvP }}" hint-placeholder-val="{{ false }}"><div class="qpvi"><div class="qscr" data-o="p"><div class="qband" data-k="{{ qPvK }}" data-pos="{{ qPvPos }}"><span translate="no">{{ qPvText }}</span></div></div><span class="mut sm">{{ qPvPT }}</span></div></sc-if>
+              <sc-if value="{{ qPvLed }}" hint-placeholder-val="{{ false }}"><div class="qpvi"><div class="qled" translate="no"><dc-import name="Slide" sx="" kind="led" title="{{ qPvText }}" text="" bg="#050505" img="" dev="{{ qLedDev }}" w="{{ qLedW }}" r="6" ledsize="S" ledalign="left" ledcol="" ledbg="{{ qLedBg }}" hint-size="168px,56px"></dc-import></div><span class="mut sm">{{ qPvLedT }}</span></div></sc-if>
+            </div>
+            <sc-if value="{{ qPvLed }}" hint-placeholder-val="{{ false }}"><div class="mut sm">Na LED tabuli sa poloha nepoužije, správa sa zobrazí cez celú tabuľu.</div></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px"><div class="lbl">Ako dlho</div><div class="chips" style="flex-wrap: wrap"><sc-for list="{{ qDurs }}" as="c" hint-placeholder-count="4"><button class="chip" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for></div>
+            <sc-if value="{{ qKeep }}" hint-placeholder-val="{{ false }}"><div class="mut sm">{{ qKeepT }}</div></sc-if>
+            <sc-if value="{{ qCustom }}" hint-placeholder-val="{{ false }}">
+              <div class="card form dtc" style="gap: 8px">
+                <sc-if value="{{ qShowFrom }}" hint-placeholder-val="{{ true }}"><button class="dtv" aria-expanded="{{ qFOn }}" onClick="{{ qEdF }}"><span class="lbl">Začiatok</span><span class="dtvv" translate="no">{{ qFT }}</span></button></sc-if>
+                <sc-if value="{{ qFOn }}" hint-placeholder-val="{{ true }}"><div class="wh">
+                <div class="whc" data-k="d" role="listbox" tabindex="0" aria-label="Deň" onScroll="{{ whScD }}" onKeyDown="{{ whKeyD }}"><sc-for list="{{ whDays }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="h" role="listbox" tabindex="0" aria-label="Hodina" onScroll="{{ whScH }}" onKeyDown="{{ whKeyH }}"><sc-for list="{{ whHours }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="m" role="listbox" tabindex="0" aria-label="Minúta" onScroll="{{ whScM }}" onKeyDown="{{ whKeyM }}"><sc-for list="{{ whMins }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+              </div></sc-if>
+                <button class="dtv" aria-expanded="{{ qTOn }}" onClick="{{ qEdT }}"><span class="lbl">Koniec</span><span class="dtvv" translate="no">{{ qTT }}</span></button>
+                <sc-if value="{{ qTOn }}" hint-placeholder-val="{{ false }}"><div class="wh">
+                <div class="whc" data-k="d" role="listbox" tabindex="0" aria-label="Deň" onScroll="{{ whScD }}" onKeyDown="{{ whKeyD }}"><sc-for list="{{ whDays }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="h" role="listbox" tabindex="0" aria-label="Hodina" onScroll="{{ whScH }}" onKeyDown="{{ whKeyH }}"><sc-for list="{{ whHours }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="m" role="listbox" tabindex="0" aria-label="Minúta" onScroll="{{ whScM }}" onKeyDown="{{ whKeyM }}"><sc-for list="{{ whMins }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+              </div></sc-if>
+                <sc-if value="{{ qCErr }}" hint-placeholder-val="{{ false }}"><div class="err" role="alert">{{ qCErrT }}</div></sc-if>
+                <sc-if value="{{ qShowFrom }}" hint-placeholder-val="{{ true }}"><div class="mut sm">Ťuknite na Začiatok alebo Koniec a hodnotu nastavte posunutím.</div></sc-if>
+              </div>
+            </sc-if></div>
+        </div>
+        <div class="sheet-f"><button class="btn" data-k="p" style="flex: 1" disabled="{{ qOff }}" onClick="{{ qSend }}">{{ qSendT }}</button></div>
+      </sc-if>
+      <sc-if value="{{ qPlaces }}" hint-placeholder-val="{{ false }}">
+        <div class="sheet-h"><button class="ib" onClick="{{ qClosePlaces }}" aria-label="Späť na správu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.back }}"></path></svg></button><div class="shh">Kam poslať</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+        <div style="padding: 4px 16px 10px; display: flex; flex-direction: column; gap: 10px; flex: none">
+          <label class="srch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B6566" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.search }}"></path></svg><input value="{{ qSearch }}" onInput="{{ setQSearch }}" placeholder="Hľadať miesto" aria-label="Hľadať miesto"></label>
+          <div class="chips"><sc-for list="{{ qGrps }}" as="c" hint-placeholder-count="5"><button class="chip" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for></div>
+        </div>
+        <div class="sheet-b" style="padding-top: 0">
+          <div class="list">
+            <sc-if value="{{ qShowAll }}" hint-placeholder-val="{{ true }}"><button class="row" style="min-height: 56px" role="checkbox" aria-checked="{{ qAllOn }}" onClick="{{ qToggleAll }}"><span class="chk" aria-hidden="true"></span><span style="flex: 1; min-width: 0"><span class="nm">{{ qAllT }}</span><span class="mut sm" style="display: block">Každé miesto, ktoré má zariadenie</span></span></button></sc-if>
+            <sc-for list="{{ qPcs }}" as="p" hint-placeholder-count="6"><button class="row" style="min-height: 56px" role="checkbox" aria-checked="{{ p.on }}" onClick="{{ p.pick }}"><span class="chk" aria-hidden="true"></span><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ p.name }}</span><span class="mut sm" style="display: block">{{ p.sub }}</span></span></button></sc-for>
+          </div>
+          <sc-if value="{{ qPcEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">Žiadne miesto nezodpovedá hľadaniu.</div></sc-if>
+        </div>
+        <div class="sheet-f"><button class="btn" data-k="p" style="flex: 1" disabled="{{ qPcOff }}" onClick="{{ qClosePlaces }}">{{ qPcBtn }}</button></div>
+      </sc-if>
+    </div></div>
+  </sc-if>
+
+  <!-- ===== OBSAH SEKCIE (výber podľa zdrojov dát a zariadenia) ===== -->
+  <sc-if value="{{ sh_ct }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 92%" role="dialog" aria-label="Čo sa zobrazí v sekcii">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh">Čo sa zobrazí v sekcii</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b">
+        <div class="mut sm">{{ ctDevT }}</div>
+        <div class="ctg" role="radiogroup" aria-label="Čo sa zobrazí v sekcii"><sc-for list="{{ secTypes }}" as="t" hint-placeholder-count="8"><button class="ctb" role="radio" aria-checked="{{ t.on }}" onClick="{{ t.pick }}"><span class="cti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ t.d }}"></path></svg></span><span style="min-width: 0"><span class="ctt">{{ t.label }}</span><span class="cts">{{ t.sub }}</span></span></button></sc-for></div>
+      </div>
+    </div></div>
+  </sc-if>
+
+  <!-- ===== PREPNUTIE PLAYLISTU ===== -->
+  <sc-if value="{{ sh_sw }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 92%" role="dialog" aria-label="Prepnúť playlist">
+      <div class="grab"></div>
+      <div class="sheet-h"><sc-if value="{{ swCanBack }}" hint-placeholder-val="{{ false }}"><button class="ib" onClick="{{ swBack }}" aria-label="Späť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.back }}"></path></svg></button></sc-if><div class="shh">{{ swTitle }}</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b">
+        <div><div style="font-weight: 600">{{ swSub }} <span translate="no">{{ swSubD }}</span></div><div class="mut sm">{{ swSub2 }}</div></div>
+        <sc-if value="{{ swIsPl }}" hint-placeholder-val="{{ true }}"><div class="list"><sc-for list="{{ swPls }}" as="p" hint-placeholder-count="4"><button class="row" onClick="{{ p.pick }}" role="radio" aria-checked="{{ p.on }}" aria-disabled="{{ p.off }}"><span class="rad" aria-hidden="true"></span><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ p.name }}</span><span class="mut sm" style="display: block">{{ p.meta }}</span></span><sc-if value="{{ p.cur }}" hint-placeholder-val="{{ false }}"><span class="pill" data-k="ok">Teraz sa prehráva</span></sc-if></button></sc-for></div><sc-if value="{{ swNoOther }}" hint-placeholder-val="{{ false }}"><div class="note"><span>Pre toto zariadenie nie je iný playlist, na ktorý by sa dalo prepnúť.</span></div></sc-if></sc-if>
+        <sc-if value="{{ swIsPc }}" hint-placeholder-val="{{ false }}"><div class="mut sm">Vyberte jedno alebo viac miest, alebo celú skupinu.</div><div class="chips" style="flex-wrap: wrap"><sc-for list="{{ swGrps }}" as="c" hint-placeholder-count="3"><button class="chip" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for></div><div class="list"><sc-for list="{{ swPcs }}" as="p" hint-placeholder-count="6"><button class="row" onClick="{{ p.pick }}" role="checkbox" aria-checked="{{ p.on }}"><span class="chk" aria-hidden="true"></span><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ p.name }}</span><span class="mut sm" style="display: block"><span translate="no">{{ p.subD }}</span>{{ p.sub }}</span></span></button></sc-for></div><sc-if value="{{ swNoPc }}" hint-placeholder-val="{{ false }}"><div class="note"><span>Playlist sa už prehráva na všetkých miestach s týmto zariadením.</span></div></sc-if></sc-if>
+        <sc-if value="{{ swIsDur }}" hint-placeholder-val="{{ false }}">
+          <div class="card" style="display: flex; flex-direction: column; gap: 6px"><div class="mut sm">Playlist</div><div class="nm" translate="no">{{ swPlName }}</div><div class="mut sm" style="margin-top: 6px">Kde</div><div style="line-height: 1.35">{{ swPlaces }}</div></div>
+          <div class="lbl">Ako dlho sa má prehrávať</div>
+          <div class="list"><sc-for list="{{ swDurs }}" as="d" hint-placeholder-count="4"><button class="row" style="min-height: 56px" onClick="{{ d.pick }}" role="radio" aria-checked="{{ d.on }}"><span class="rad" aria-hidden="true"></span><span style="flex: 1; min-width: 0"><span class="nm">{{ d.label }}</span><span class="mut sm" style="display: block">{{ d.sub }}</span></span></button></sc-for></div>
+          <sc-if value="{{ swCustom }}" hint-placeholder-val="{{ false }}">
+            <div class="card form dtc" style="gap: 8px">
+              <button class="dtv" aria-expanded="{{ swFOn }}" onClick="{{ swEdF }}"><span class="lbl">Začiatok</span><span class="dtvv" translate="no">{{ swFT }}</span></button>
+              <sc-if value="{{ swFOn }}" hint-placeholder-val="{{ true }}"><div class="wh">
+                <div class="whc" data-k="d" role="listbox" tabindex="0" aria-label="Deň" onScroll="{{ whScD }}" onKeyDown="{{ whKeyD }}"><sc-for list="{{ whDays }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="h" role="listbox" tabindex="0" aria-label="Hodina" onScroll="{{ whScH }}" onKeyDown="{{ whKeyH }}"><sc-for list="{{ whHours }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="m" role="listbox" tabindex="0" aria-label="Minúta" onScroll="{{ whScM }}" onKeyDown="{{ whKeyM }}"><sc-for list="{{ whMins }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+              </div></sc-if>
+              <button class="dtv" aria-expanded="{{ swTOn }}" onClick="{{ swEdT }}"><span class="lbl">Koniec</span><span class="dtvv" translate="no">{{ swTT }}</span></button>
+              <sc-if value="{{ swTOn }}" hint-placeholder-val="{{ false }}"><div class="wh">
+                <div class="whc" data-k="d" role="listbox" tabindex="0" aria-label="Deň" onScroll="{{ whScD }}" onKeyDown="{{ whKeyD }}"><sc-for list="{{ whDays }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="h" role="listbox" tabindex="0" aria-label="Hodina" onScroll="{{ whScH }}" onKeyDown="{{ whKeyH }}"><sc-for list="{{ whHours }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+                <div class="whc" data-k="m" role="listbox" tabindex="0" aria-label="Minúta" onScroll="{{ whScM }}" onKeyDown="{{ whKeyM }}"><sc-for list="{{ whMins }}" as="x" hint-placeholder-count="5"><div class="whi" role="option" aria-selected="{{ x.on }}" translate="no" onClick="{{ x.pick }}">{{ x.label }}</div></sc-for></div>
+              </div></sc-if>
+              <sc-if value="{{ swCErr }}" hint-placeholder-val="{{ false }}"><div class="err" role="alert">{{ swCErrT }}</div></sc-if>
+              <div class="mut sm">Ťuknite na Začiatok alebo Koniec a hodnotu nastavte posunutím.</div>
+            </div>
+          </sc-if>
+        </sc-if>
+      </div>
+      <div class="sheet-f"><button class="btn" data-k="p" style="flex: 1" disabled="{{ swOff }}" onClick="{{ swNext }}">{{ swBtn }}</button></div>
+    </div></div>
+  </sc-if>
+
+  <!-- ===== PRIDANIE FOTKY / NAHRATIE / NOVÝ PLAYLIST ===== -->
+  <sc-if value="{{ sh_add }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" role="dialog" aria-label="{{ addTitle }}">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh">{{ addTitle }}</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b" style="gap: 10px">
+        <sc-for list="{{ addOpts }}" as="o" hint-placeholder-count="3"><button class="opt" onClick="{{ o.pick }}"><span class="ico" style="width: 44px; height: 44px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ o.d }}"></path></svg></span><span style="flex: 1; text-align: left"><span class="nm">{{ o.title }}</span><span class="mut sm" style="display: block">{{ o.sub }}</span></span></button></sc-for>
+      </div>
+    </div></div>
+  </sc-if>
+
+  <sc-if value="{{ sh_pick }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 88%" role="dialog" aria-label="Vybrať z galérie">
+      <div class="grab"></div>
+      <div class="sheet-h"><sc-if value="{{ pickFromAdd }}" hint-placeholder-val="{{ false }}"><button class="ib" onClick="{{ pickBack }}" aria-label="Späť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.back }}"></path></svg></button></sc-if><div class="shh">Vybrať z galérie</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b"><div class="grid"><sc-for list="{{ pickRows }}" as="g" hint-placeholder-count="6">
+        <button class="gt" onClick="{{ g.pick }}" aria-label="{{ g.aria }}"><span style="{{ g.thS }}"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ g.d }}"></path></svg></span><span class="nm" style="font-size: 14px" translate="no">{{ g.name }}</span><span class="mut sm">{{ g.size }}</span></button>
+      </sc-for></div></div>
+    </div></div>
+  </sc-if>
+
+  <!-- ===== DETAIL SPRÁVY Z HISTÓRIE (len Admin a Director) ===== -->
+  <sc-if value="{{ sh_qd }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 92%" role="dialog" aria-label="Detail správy">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh">Detail správy</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b" tabindex="0" role="region" aria-label="Detail správy">
+        <div class="card" style="display: flex; flex-direction: column; gap: 8px"><span class="pill" data-k="{{ qd.prioK }}" style="align-self: flex-start">{{ qd.prioT }}</span><div class="nm" style="font-size: 18px" translate="no">{{ qd.text }}</div></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div class="card" style="padding: 10px 12px"><div class="mut sm">Odosielateľ</div><div class="nm" translate="no">{{ qd.by }}</div><div class="mut sm" translate="no">{{ qd.byRole }}</div></div>
+          <div class="card" style="padding: 10px 12px"><div class="mut sm">Odoslané</div><div class="nm">{{ qd.sentT }}</div></div>
+          <div class="card" style="padding: 10px 12px"><div class="mut sm">{{ qd.endLbl }}</div><div class="nm">{{ qd.endT }}</div><sc-if value="{{ qd.hasEndBy }}" hint-placeholder-val="{{ false }}"><div class="mut sm" translate="no">{{ qd.endBy }}</div></sc-if></div>
+          <div class="card" style="padding: 10px 12px"><div class="mut sm">Trvanie</div><div class="nm">{{ qd.durT }}</div></div>
+          <div class="card" style="padding: 10px 12px; grid-column: 1 / -1"><div class="mut sm">Kde na obrazovke</div><div class="nm">{{ qd.posT }}</div></div>
+        </div>
+        <div><div class="h2" style="margin-bottom: 6px">{{ qd.whereH }}</div>
+          <sc-if value="{{ qd.isAll }}" hint-placeholder-val="{{ false }}"><div class="card"><div class="nm">{{ qd.allT }}</div><div class="mut sm">Každé miesto, ktoré má zariadenie</div></div></sc-if>
+          <sc-if value="{{ qd.notAll }}" hint-placeholder-val="{{ true }}"><div class="list"><sc-for list="{{ qd.places }}" as="x" hint-placeholder-count="3"><div class="row" style="min-height: 52px"><span style="flex: 1; min-width: 0"><span class="nm" style="font-size: 15px" translate="no">{{ x.name }}</span><span class="mut sm" style="display: block">{{ x.sub }}</span></span></div></sc-for></div></sc-if>
+        </div>
+      </div>
+      <div class="sheet-f"><button class="btn" data-k="p" style="flex: 1" onClick="{{ qdAgain }}">Poslať znova</button></div>
+    </div></div>
+  </sc-if>
+
+  <!-- ===== STAV DORUČENIA: priebeh po miestach (správa, nahratie playlistu, prepnutie) ===== -->
+  <sc-if value="{{ sh_dl }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 92%" role="dialog" aria-label="Stav doručenia">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh">Stav doručenia</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b" tabindex="0" role="region" aria-label="Stav doručenia">
+        <div class="card" style="display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; align-items: center; gap: 8px"><span class="mut sm" style="flex: 1; min-width: 0">{{ dl.kindT }} · {{ dl.tT }}</span><span class="pill" data-k="{{ dl.pillK }}">{{ dl.pillT }}</span></div>
+          <div class="nm" style="font-size: 17px" translate="no">{{ dl.name }}</div>
+          <div style="font-weight: 600" role="status">{{ dl.t }}</div>
+          <sc-if value="{{ dl.hasWait }}" hint-placeholder-val="{{ false }}"><div class="wt sm">{{ dl.waitT }}</div></sc-if>
+          <div class="mut sm">Odosielateľ: <span translate="no">{{ dl.by }}</span></div>
+        </div>
+        <sc-if value="{{ dl.hasNote }}" hint-placeholder-val="{{ false }}"><div class="note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.info }}"></path></svg><span>{{ dl.note }}</span></div></sc-if>
+        <div><div class="h2" style="margin-bottom: 6px">{{ dl.whereH }}</div>
+          <div class="list"><sc-for list="{{ dl.rows }}" as="x" hint-placeholder-count="4"><div class="row" style="min-height: 52px"><span style="flex: 1; min-width: 0"><span class="nm" style="font-size: 15px" translate="no">{{ x.name }}</span><span class="mut sm" style="display: block">{{ x.sub }}</span></span><span class="pill" data-k="{{ x.k }}">{{ x.t }}</span></div></sc-for></div>
+        </div>
+      </div>
+    </div></div>
+  </sc-if>
+
+  <sc-if value="{{ sh_gd }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 92%" role="dialog" aria-label="Detail súboru">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh" translate="no">{{ gd.name }}</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b">
+        <div style="{{ gd.bigS }}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ gd.d }}"></path></svg></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><div class="card" style="padding: 10px 12px"><div class="mut sm">Typ</div><div class="nm">{{ gd.typeT }}</div></div><div class="card" style="padding: 10px 12px"><div class="mut sm">Veľkosť</div><div class="nm">{{ gd.size }}</div></div><div class="card" style="padding: 10px 12px"><div class="mut sm">Priečinok</div><div class="nm">{{ gd.folder }}</div></div><div class="card" style="padding: 10px 12px"><div class="mut sm">Použité</div><div class="nm">{{ gd.usedT }}</div></div></div>
+        <sc-if value="{{ gd.hasUse }}" hint-placeholder-val="{{ false }}"><div><div class="h2" style="margin-bottom: 6px">{{ gdUseH }}</div>
+          <div class="list"><sc-for list="{{ gdUseRows }}" as="u" hint-placeholder-count="2">
+            <sc-if value="{{ u.canOpen }}" hint-placeholder-val="{{ true }}"><button class="row" style="min-height: 56px" onClick="{{ u.open }}" aria-label="{{ u.aria }}"><span class="ico" style="width: 36px; height: 36px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.list }}"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ u.name }}</span><span class="mut sm" style="display: block">{{ u.sub }}</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.next }}"></path></svg></button></sc-if>
+            <sc-if value="{{ u.noOpen }}" hint-placeholder-val="{{ false }}"><div class="row" style="min-height: 56px"><span class="ico" style="width: 36px; height: 36px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.list }}"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ u.name }}</span><span class="mut sm" style="display: block">{{ u.sub }}</span></span></div></sc-if>
+          </sc-for></div></div></sc-if>
+      </div>
+      <sc-if value="{{ gdCanUse }}" hint-placeholder-val="{{ false }}"><div class="sheet-f"><button class="btn" data-k="p" style="flex: 1" onClick="{{ gdAddToPl }}">Pridať do playlistu</button></div></sc-if>
+    </div></div>
+  </sc-if>
+
+  <!-- ===== ZOZNAM SNÍMOK (pridanie do playlistu) ===== -->
+  <sc-if value="{{ sh_lib }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 92%" role="dialog" aria-label="Pridať snímku">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh">Pridať snímku</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div style="padding: 4px 16px 10px; display: flex; flex-direction: column; gap: 10px; flex: none">
+        <div><div style="font-weight: 600">{{ libDevT }}</div><div class="mut sm">Ponúkajú sa len snímky vytvorené pre toto zariadenie. Ťuknutím sa snímka pridá na koniec playlistu.</div></div>
+        <label class="srch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B6566" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.search }}"></path></svg><input value="{{ libQ }}" onInput="{{ setLibQ }}" placeholder="Hľadať snímku" aria-label="Hľadať snímku"></label>
+      </div>
+      <div class="sheet-b" style="padding-top: 0">
+        <div class="list"><sc-for list="{{ libRows }}" as="r" hint-placeholder-count="5">
+          <button class="row" onClick="{{ r.pick }}" aria-label="{{ r.aria }}">
+            <dc-import name="Slide" sx="{{ r.sx }}" kind="{{ r.kind }}" title="{{ r.title }}" text="{{ r.text }}" bg="{{ r.bg }}" img="{{ r.img }}" dev="{{ r.dev }}" w="{{ r.w }}" r="6" ledsize="{{ r.ledSize }}" ledalign="{{ r.ledAlign }}" ledcol="{{ r.ledCol }}" ledbg="{{ r.ledBg }}" hint-size="92px,52px"></dc-import>
+            <span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ r.title }}</span><span class="mut sm" style="display: block">{{ r.meta }}</span><span class="mut sm" style="display: block">{{ r.from }}</span></span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0E8080" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="{{ ic.plus }}"></path></svg>
+          </button>
+        </sc-for></div>
+        <sc-if value="{{ libEmpty }}" hint-placeholder-val="{{ false }}"><div class="empty">{{ libEmptyT }}</div></sc-if>
+      </div>
+    </div></div>
+  </sc-if>
+
+  <sc-if value="{{ sh_list }}" hint-placeholder-val="{{ false }}">
+    <div class="sheetbg" onClick="{{ bgClose }}"><div class="sheet" style="max-height: 88%" role="dialog" aria-label="{{ lsTitle }}">
+      <div class="grab"></div>
+      <div class="sheet-h"><div class="shh">{{ lsTitle }}</div><button class="ib" onClick="{{ closeSheet }}" aria-label="Zavrieť"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="{{ ic.close }}"></path></svg></button></div>
+      <div class="sheet-b"><div class="mut">{{ lsSub }}</div><div class="list"><sc-for list="{{ lsRows }}" as="p" hint-placeholder-count="4"><button class="row" onClick="{{ p.pick }}"><span style="flex: 1; min-width: 0"><span class="nm" translate="no">{{ p.name }}</span><span class="mut sm" style="display: block">{{ p.meta }}</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E8080" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ p.d }}"></path></svg></button></sc-for></div></div>
+    </div></div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div class="toast" role="status"><sc-if value="{{ toastOk }}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2BD0D0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="M5 13l4 4L19 7"></path></svg></sc-if><sc-if value="{{ toastBad }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFB4A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="{{ ic.wifi }}"></path></svg></sc-if><span style="flex: 1; min-width: 0"><span style="display: block">{{ toast }}</span><sc-if value="{{ hasToastDl }}" hint-placeholder-val="{{ false }}"><span class="tdl"><span>{{ toastDlT }}</span><sc-if value="{{ toastDlHasW }}" hint-placeholder-val="{{ false }}"><span class="tdlw">{{ toastDlW }}</span></sc-if></span></sc-if></span></div></sc-if>
+</div>
+</div>

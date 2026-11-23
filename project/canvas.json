@@ -1,0 +1,442 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-13T12:00:00Z"
+ },
+ "title": "Info Designer 2 – mobilná aplikácia (telefón)",
+ "pages": [
+  {
+   "id": "app",
+   "name": "Mobilná aplikácia"
+  }
+ ],
+ "boards": {
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Klikateľná aplikácia (telefón) – skúšajte priamo tu",
+   "page": "app",
+   "is_interactive": true,
+   "expand": "fill"
+  },
+  "Obr_Playlisty.dc.html": {
+   "x": 470,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Playlisty – zoznam, filter, upraviť (ceruzka) a náhľad (play); nový playlist sa v mobile nevytvára",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_DetailPlaylistu.dc.html": {
+   "x": 940,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Detail playlistu pre displej – poradie, pridanie fotky, odoslanie",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_UpravaSnimky.dc.html": {
+   "x": 1880,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Úprava snímky – text, farba, trvanie; odstránenie z playlistu (snímka sa nezmaže)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_LED.dc.html": {
+   "x": 2350,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Úprava textu pre LED tabuľu – veľkosť, farba, pole",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_PridanieFotky.dc.html": {
+   "x": 470,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Pridanie fotky – odfotiť / z telefónu / z galérie",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Nahlad.dc.html": {
+   "x": 1410,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Náhľad playlistu na jeho zariadení",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_RychlaSprava.dc.html": {
+   "x": 1880,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Rýchla správa – text, šablóny, kam, priorita, náhľad na zariadení, trvanie",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_VyberMiest.dc.html": {
+   "x": 2350,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Rýchla správa – výber miest (všetky, skupina, jednotlivo)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Miesta.dc.html": {
+   "x": 2820,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Miesta – skupiny, miesta s hlásením navrchu, filter; ťuknutím detail miesta, úprava a prepnutie playlistu",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_PrepnutiePlaylistu.dc.html": {
+   "x": 0,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Prepnutie playlistu na mieste – čo prehrať a ako dlho (aj vlastný čas od – do)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Galeria.dc.html": {
+   "x": 470,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Galéria (Viac › Galéria) – súbory, filtre, nahratie, použité v playlistoch (bez mazania)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Viac.dc.html": {
+   "x": 940,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Viac – prepnutie účtu, schvaľovanie, galéria, história správ, záznam aktivít, nastavenia, jazyk",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Schvalovanie.dc.html": {
+   "x": 1410,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Schvaľovanie – čaká a vybavené",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_DetailSchvalenia.dc.html": {
+   "x": 1880,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Detail schválenia – zmeny, schváliť / vrátiť / zamietnuť",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Nastavenia.dc.html": {
+   "x": 2350,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Nastavenia – vzhľad, upozornenia v telefóne, AI asistent, zdroje dát, simulácia výpadku, úložisko",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_AI.dc.html": {
+   "x": 2820,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "AI asistent (záložka dole) – chat: návrh správy, hlásenia, čo sa kde hrá",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Slide.dc.html": {
+   "x": 0,
+   "y": 2892,
+   "w": 342,
+   "h": 192,
+   "title": "Pomocný komponent – vykreslenie snímky (displej, kiosk, LED)",
+   "page": "app"
+  },
+  "Obr_ZoznamSnimok.dc.html": {
+   "x": 940,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Pridanie snímky – výber zo zoznamu vytvorených snímok",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Oznacnik.dc.html": {
+   "x": 2820,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Playlist pre označník – LED čas a dátum, LED odchody, e-papier",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Jazyk.dc.html": {
+   "x": 470,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "Jazyk aplikácie – výber jazyka (Viac › Jazyk)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Jazyk_CS.dc.html": {
+   "x": 940,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "Čeština – domovská obrazovka",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Jazyk_PL.dc.html": {
+   "x": 1410,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "Polski – playlisty",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Jazyk_EN.dc.html": {
+   "x": 1880,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "English – rýchla správa",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Jazyk_DE.dc.html": {
+   "x": 2350,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "Deutsch – detail playlistu",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_HistoriaSprav.dc.html": {
+   "x": 2820,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "História správ – ťuknutím detail správy, poslať znova; len Admin a Director (Viac › História správ)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_PrepnutieUctu.dc.html": {
+   "x": 3290,
+   "y": 1928,
+   "w": 390,
+   "h": 844,
+   "title": "Prepnutie účtu – Admin, Director, Worker, Partner",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Partner.dc.html": {
+   "x": 3290,
+   "y": 964,
+   "w": 390,
+   "h": 844,
+   "title": "Partner – len pridelené miesta, zmeny idú na schválenie",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_TmavyRezim.dc.html": {
+   "x": 3290,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Tmavý vzhľad – domovská obrazovka",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_SnimkaSekcie.dc.html": {
+   "x": 0,
+   "y": 3856,
+   "w": 390,
+   "h": 844,
+   "title": "Vzor „Kiosk s menu“ (32″ kiosk) – ťuknutím na sekciu ju upravíte, vzor sa v mobile nemení",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_PlaylistSekcie.dc.html": {
+   "x": 1410,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Playlist so zloženými snímkami – snímky podľa vzorov so sekciami (31″ zastávka)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_VzorPolovice.dc.html": {
+   "x": 470,
+   "y": 3856,
+   "w": 390,
+   "h": 844,
+   "title": "Vzor „Hore 1 + dole 2“ (31″) – hore oznam, dole mapa a odchody",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_VzorOdchody.dc.html": {
+   "x": 940,
+   "y": 3856,
+   "w": 390,
+   "h": 844,
+   "title": "Vzor „Odchody + 2 info“ (31″) – odchody, oznam, počasie",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_VzorPas.dc.html": {
+   "x": 1410,
+   "y": 3856,
+   "w": 390,
+   "h": 844,
+   "title": "Vzor „Pás – nástupište“ (55″ na šírku) – odchody a reklama vedľa seba",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_Vzor2x2.dc.html": {
+   "x": 1880,
+   "y": 3856,
+   "w": 390,
+   "h": 844,
+   "title": "Vzor „Nástenka 2 × 2 na šírku“ (55″) – štyri sekcie",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_DetailSpravy.dc.html": {
+   "x": 3290,
+   "y": 2892,
+   "w": 390,
+   "h": 844,
+   "title": "Detail správy z histórie – komu išla, kto a kedy ju odoslal, ako skončila (len Admin a Director)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_DetailMiesta.dc.html": {
+   "x": 0,
+   "y": 4820,
+   "w": 390,
+   "h": 844,
+   "title": "Detail miesta – stav zariadenia, čo sa prehráva a čo príde potom, rýchle správy, posledné doručenia",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_StavDorucenia.dc.html": {
+   "x": 470,
+   "y": 4820,
+   "w": 390,
+   "h": 844,
+   "title": "Stav doručenia – priebeh po miestach: zobrazené, odosiela sa, čaká (offline)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_UpravaSpravy.dc.html": {
+   "x": 940,
+   "y": 4820,
+   "w": 390,
+   "h": 844,
+   "title": "Úprava bežiacej správy – text, miesta, priorita, koniec; bez zrušenia a nového odoslania",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_SablonaSpravy.dc.html": {
+   "x": 1410,
+   "y": 4820,
+   "w": 390,
+   "h": 844,
+   "title": "Šablóna správy – linka a minúty sa volia ťuknutím, náhľad na displeji a LED tabuli",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_ZaznamAktivit.dc.html": {
+   "x": 1880,
+   "y": 4820,
+   "w": 390,
+   "h": 844,
+   "title": "Záznam aktivít – kto čo zverejnil, prepol, odoslal alebo schválil (len Admin a Director)",
+   "page": "app",
+   "is_interactive": true
+  },
+  "Obr_BezPripojenia.dc.html": {
+   "x": 2350,
+   "y": 4820,
+   "w": 390,
+   "h": 844,
+   "title": "Bez pripojenia – pruh s upozornením, odoslanie je zablokované, rozpísaná práca ostáva",
+   "page": "app",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Obr_Playlisty.dc.html",
+  "Obr_DetailPlaylistu.dc.html",
+  "Obr_UpravaSnimky.dc.html",
+  "Obr_PlaylistSekcie.dc.html",
+  "Obr_SnimkaSekcie.dc.html",
+  "Obr_VzorPolovice.dc.html",
+  "Obr_VzorOdchody.dc.html",
+  "Obr_VzorPas.dc.html",
+  "Obr_Vzor2x2.dc.html",
+  "Obr_LED.dc.html",
+  "Obr_Oznacnik.dc.html",
+  "Obr_PridanieFotky.dc.html",
+  "Obr_ZoznamSnimok.dc.html",
+  "Obr_Nahlad.dc.html",
+  "Obr_RychlaSprava.dc.html",
+  "Obr_VyberMiest.dc.html",
+  "Obr_Miesta.dc.html",
+  "Obr_PrepnutiePlaylistu.dc.html",
+  "Obr_Galeria.dc.html",
+  "Obr_Viac.dc.html",
+  "Obr_Schvalovanie.dc.html",
+  "Obr_DetailSchvalenia.dc.html",
+  "Obr_Nastavenia.dc.html",
+  "Obr_AI.dc.html",
+  "Obr_HistoriaSprav.dc.html",
+  "Obr_DetailSpravy.dc.html",
+  "Obr_Jazyk.dc.html",
+  "Obr_Jazyk_CS.dc.html",
+  "Obr_Jazyk_PL.dc.html",
+  "Obr_Jazyk_EN.dc.html",
+  "Obr_Jazyk_DE.dc.html",
+  "Obr_PrepnutieUctu.dc.html",
+  "Obr_Partner.dc.html",
+  "Obr_TmavyRezim.dc.html",
+  "Slide.dc.html",
+  "Obr_DetailMiesta.dc.html",
+  "Obr_StavDorucenia.dc.html",
+  "Obr_UpravaSpravy.dc.html",
+  "Obr_SablonaSpravy.dc.html",
+  "Obr_ZaznamAktivit.dc.html",
+  "Obr_BezPripojenia.dc.html"
+ ],
+ "launch": {
+  "view": "focused",
+  "file": "Main.dc.html"
+ }
+}
