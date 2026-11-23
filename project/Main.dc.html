@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<meta name="wz-build" content="20261123-2228">
 <link rel="icon" href="./ikony/ikona.svg" type="image/svg+xml">
 <link rel="icon" href="./ikony/ikona-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="./ikony/apple-touch-icon.png">
@@ -661,6 +662,7 @@ textarea.inp{height:auto;padding:12px 14px;resize:none;line-height:1.35}
           <button class="row" onClick="{{ m.open }}"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ m.d }}"></path></svg></span><span style="flex: 1; min-width: 0"><span class="nm">{{ m.title }}</span><span class="mut sm" style="display: block">{{ m.sub }}</span></span><sc-if value="{{ m.hasBadge }}" hint-placeholder-val="{{ false }}"><span class="cnt">{{ m.badge }}</span></sc-if><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.next }}"></path></svg></button>
         </sc-for></div>
         <button class="btn" onClick="{{ logout }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ ic.logout }}"></path></svg>Odhlásiť sa</button>
+        <div class="mut sm" style="text-align: center">Verzia prototypu <span translate="no">{{ verT }}</span></div>
       </div>
     </sc-if>
 
@@ -1078,6 +1080,9 @@ const IC = {
   shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', db: 'M12 8c4.4 0 8-1.1 8-2.5S16.4 3 12 3 4 4.1 4 5.5 7.6 8 12 8zM4 5.5v13C4 19.9 7.6 21 12 21s8-1.1 8-2.5v-13M4 12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5',
   spark: 'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z', send: 'M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z', edit: 'M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z', ctext: 'M4 7V5h16v2M12 5v14M9 19h6', bus: 'M6 17V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v11zM6 11h12M8 20v-3M16 20v-3', table: 'M3 5h18v14H3zM3 10h18M9 10v9M15 10v9', link: 'M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1', map: 'M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14', route: 'M6 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 17V11a4 4 0 0 1 4-4h6M18 7v6a4 4 0 0 1-4 4H8', grid: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z', cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4', drop: 'M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z', clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2', vbus: 'M5 16V7a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v9zM5 12h14M8 19v-3M16 19v-3M9 8h6', remove: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM8 12h8', globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18', tick: 'M5 13l4 4L19 7', none: 'M0 0', chevD: 'M6 9l6 6 6-6', chevU: 'M6 15l6-6 6 6', wifi: 'M1 1l22 22M16.7 11.1A10.9 10.9 0 0 1 19 12.6M5 12.6a10.9 10.9 0 0 1 5.2-2.4M10.7 5.1A16 16 0 0 1 22.6 9M1.4 9a15.9 15.9 0 0 1 4.7-2.9M8.5 16.1a6 6 0 0 1 7 0M12 20h.01'
 };
+// číslo verzie a čas zostavenia doplní build.py; podľa času sa spozná, že na serveri je novšia verzia
+const WZ_V = ['49', '20261123-2228'];
+try { window.WZ_MAIN_BUILD = WZ_V[1]; } catch (e) {}
 const plural = (n, a) => n === 1 ? a[0] : (n >= 2 && n <= 4 ? a[1] : a[2]);
 const mmss = (t) => Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2);
 const BG = ['#0E8080', '#0B6E6E', '#1E2A5A', '#2F62B0', '#5B2A86', '#E07A2B', '#C8322B', '#1A1F1F'];
@@ -2098,7 +2103,7 @@ class Component extends DCLogic {
       gd, gdUsed: galFile.used > 0, gdUseRows: galFile.usedIn.map((n) => { const p = s.pls.find((x) => x.name === n); return { name: n, sub: p ? DEV[p.dev][1] + ' · ' + slMeta(p) : '', canOpen: !!p && vPls.indexOf(p) >= 0, noOpen: !(p && vPls.indexOf(p) >= 0), open: () => { if (p) nav('pl', { plId: p.id, sheet: null }); }, aria: 'Upraviť playlist: ' + n }; }), gdUseH: (galFile.type === 'aud' ? 'Použité v hláseniach (' : 'Použité v playlistoch (') + galFile.usedIn.length + ')', gdCanUse: galFile.type !== 'aud', gdAddToPl: () => set({ sheet: 'gpl', gplFile: galFile.id }),
       lsTitle: isAcc ? 'Prepnúť účet' : isLang ? 'Jazyk aplikácie' : 'Pridať do playlistu', lsSub: isAcc ? 'Prototyp: aplikácia sa zobrazí tak, ako ju vidí vybraný účet.' : isLang ? 'Zmení sa jazyk tlačidiel, nadpisov a hlásení. Obsah playlistov a názvy miest ostávajú tak, ako ste ich napísali.' : 'Súbor „' + galFile.name + '“ sa pridá ako nová snímka na koniec playlistu. Ponúkajú sa len playlisty pre displeje.', lsRows,
       // viac / miesta / nastavenia / AI
-      moreRows, logout: () => say('Prototyp: odhlásenie nie je zapojené.'), pq: s.pq, setPq: (e) => set({ pq: e.target.value }), pcChips, pcRows, pcGroups, pcEmpty: pcRows.length === 0, pcFootT: 'Zobrazených ' + pcRows.length + ' z ' + vPlaces.length + ' miest',
+      moreRows, verT: WZ_V[0] + ' · ' + parseInt(WZ_V[1].slice(6, 8), 10) + '. ' + parseInt(WZ_V[1].slice(4, 6), 10) + '. ' + WZ_V[1].slice(0, 4) + ' ' + WZ_V[1].slice(9, 11) + ':' + WZ_V[1].slice(11, 13), logout: () => say('Prototyp: odhlásenie nie je zapojené.'), pq: s.pq, setPq: (e) => set({ pq: e.target.value }), pcChips, pcRows, pcGroups, pcEmpty: pcRows.length === 0, pcFootT: 'Zobrazených ' + pcRows.length + ' z ' + vPlaces.length + ' miest',
       notifRows, aiRows,
       aiHi: ACC.first ? 'Dobrý deň, ' + ACC.first + '. S čím vám pomôžem?' : 'Dobrý deň. S čím vám pomôžem?', aiIntro: canQuick ? 'Napíšem text rýchlej správy, nájdem miesta s hlásením, poviem, čo sa kde prehráva, a ukážem, čo čaká na schválenie.' : 'Nájdem miesta s hlásením, poviem, čo sa kde prehráva, a ukážem, čo ste odoslali na schválenie.', canQuick, aiMsgs, aiChips, aiTyping: s.aiTyping, aiQ: s.aiQ, aiNoQ: !s.aiQ.trim() || s.aiTyping, setAiQ: (e) => set({ aiQ: e.target.value }), aiSend: () => aiAsk(s.aiQ, false), aiKey: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiAsk(s.aiQ, false); } },
       // náhľad

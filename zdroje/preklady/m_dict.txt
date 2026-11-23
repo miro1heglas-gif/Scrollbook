@@ -930,3 +930,7 @@ Správa je upravená. Na displejoch sa zmení do pár sekúnd. ||| Zpráva je up
 Naplánovaná správa je upravená. ||| Naplánovaná zpráva je upravena. ||| Zaplanowana wiadomość została zmieniona. ||| The scheduled message has been edited. ||| Die geplante Meldung wurde geändert.
 Linka {L} mešká približne {M} minút. Ďakujeme za trpezlivosť. ||| Linka {L} má zpoždění asi {M} minut. Děkujeme za trpělivost. ||| Linia {L} jest opóźniona o około {M} minut. Dziękujemy za cierpliwość. ||| Line {L} is running about {M} minutes late. Thank you for your patience. ||| Linie {L} hat etwa {M} Minuten Verspätung. Vielen Dank für Ihre Geduld.
 Linka {L} je dnes odklonená. Zastávka je dočasne presunutá. ||| Linka {L} je dnes odkloněna. Zastávka je dočasně přesunuta. ||| Linia {L} kursuje dziś objazdem. Przystanek jest tymczasowo przeniesiony. ||| Line {L} is diverted today. The stop has been temporarily moved. ||| Linie {L} wird heute umgeleitet. Die Haltestelle ist vorübergehend verlegt.
+# ===== v49: verzia a automatické načítanie novej verzie =====
+Verzia prototypu ||| Verze prototypu ||| Wersja prototypu ||| Prototype version ||| Prototyp-Version
+Je dostupná nová verzia aplikácie. ||| Je dostupná nová verze aplikace. ||| Dostępna jest nowa wersja aplikacji. ||| A new version of the app is available. ||| Eine neue Version der App ist verfügbar.
+Načítať ||| Načíst ||| Wczytaj ||| Load ||| Laden

@@ -28,7 +28,7 @@ Záznam aktivít (Viac › Záznam aktivít) vidí len Admin a Director: kto čo
 
 Ide o prototyp na odsúhlasenie návrhu, nie o produkčnú aplikáciu. Údaje sú ukážkové a držia sa len v pamäti, takže po obnovení stránky sa všetko vráti na začiatok. Fotoaparát, nahrávanie a odoslanie na zariadenia sú simulované.
 
-- **Verzia:** verzia 48 návrhu v claude.ai (artefakt typu Design), stav k 23. 11. 2026. Súbory v `project/` sú rovnaké ako v claude.ai.
+- **Verzia:** verzia 49 návrhu v claude.ai (artefakt typu Design), stav k 23. 11. 2026. Súbory v `project/` sú rovnaké ako v claude.ai.
 - **Jazyky rozhrania:** slovenčina (predvolená), čeština, poľština, angličtina, nemčina.
 - **Veľkosť:** navrhnuté pre telefón 390 × 844 px. Na širšej obrazovke sa aplikácia zobrazí v strede.
 
@@ -59,17 +59,20 @@ project/                   samotný prototyp (rovnaké súbory ako v claude.ai)
   Main.dc.html             celá aplikácia: šablóna, štýly a logika v jednom súbore
   Slide.dc.html            pomocný komponent na vykreslenie snímky (displej, kiosk, LED)
   Obr_*.dc.html            40 vstupov priamo do konkrétnej obrazovky (načítajú Main so štartovou obrazovkou, jazykom, účtom alebo vzhľadom)
-  i18n.js                  preklady (generované zo zdroje/preklady)
+  i18n.js                  preklady (generované zo zdroje/preklady) a kontrola novej verzie
+  ver.js, version.json     číslo verzie a čas zostavenia – podľa nich si telefón načíta novú verziu (generuje build.py)
   canvas.json              rozmiestnenie obrazoviek na plátne v claude.ai (na beh netreba)
   manifest.json            údaje pre pridanie na plochu telefónu (názov, ikony, farby)
   ikony/                   ikona Info Designera: favicon, ikona pre iPhone a Android
   support.js               runtime typu Design z claude.ai (pozri nižšie)
 zdroje/
+  verzia.txt               číslo verzie prototypu (zobrazuje sa vo Viac a na úvodnej stránke)
   aplikacia/               časti, z ktorých sa skladá project/Main.dc.html
     css.html               štýly
     tplA.html, tplB.html   šablóna obrazoviek
     js1.js, jsR1.js, jsR2.js  logika (údaje, stav, akcie)
-    build.py               poskladá Main.dc.html
+    build.py               poskladá Main.dc.html, zapíše ver.js, version.json a verziu do index.html
+    ver.js                 predloha kontroly novej verzie
   preklady/
     m_dict.txt             slovník: jeden riadok = sk ||| cs ||| pl ||| en ||| de
     build_i18n.py          vygeneruje project/i18n.js
@@ -139,6 +142,16 @@ python3 zdroje/preklady/build_i18n.py project/i18n.js zdroje/preklady/m_dict.txt
 Zdroje vytvoria presne súbory `project/Main.dc.html` a `project/i18n.js`, ktoré sú v repozitári.
 
 **Návrat do claude.ai:** súbory z `project/` (okrem `support.js`) sa dajú znova publikovať do artefaktu typu Design.
+
+## Nová verzia v telefóne
+
+Prehliadač v telefóne má stránku uloženú v pamäti (GitHub Pages to povoľuje na 10 minút) a pri návrate do karty alebo pri obnovení zatvorenej karty ju zo servera znova nesťahuje. Stará verzia tak môže ostať zobrazená aj dlho po nahratí novej.
+
+Aplikácia si preto novú verziu stráži sama. Pri otvorení a pri každom návrate do karty stiahne malý súbor `project/version.json` (vždy zo servera) a porovná ho s časom zostavenia, ktorý nesú načítané súbory. Ak je na serveri novšia verzia, súbory aplikácie stiahne nanovo a stránku načíta ešte raz. Ak sa to ani na druhý pokus nepodarí, ukáže oznam s tlačidlom Načítať. Rozpracovaný stav prototypu sa pri tom stratí, rovnako ako pri ručnom obnovení stránky. V claude.ai sa kontrola nespúšťa.
+
+Ktorá verzia je v telefóne, vidno vo Viac úplne dole (Verzia prototypu) a na úvodnej stránke.
+
+Pri vydaní novej verzie: zvýšte číslo v `zdroje/verzia.txt`, spustite `build.py` (čas zostavenia doplní sám) a nahrajte všetky súbory vrátane `project/version.json`, `project/ver.js` a `project/i18n.js`. Telefón so staršou verziou ako 49 kontrolu ešte nemá, tam treba stránku raz obnoviť ručne.
 
 ## Telefón a vzhľad
 
